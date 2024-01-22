@@ -94,7 +94,7 @@ namespace eos
         // cf. [LMPR:2022A], eqs. (2.22) to (2.27)
         // provided by A. Rusov as a Mathematica expression
         std::array<std::array<complex<double>, 20u>, 20u>
-        A_pauli_interference(const double & mu, const double & sqrtrho) const
+        A_pauli_interference_cd(const double & mu, const double & sqrtrho) const
         {
             const double rho = sqrtrho * sqrtrho;
 
@@ -143,7 +143,7 @@ namespace eos
         // cf. [LMPR:2022A], eqs. (2.28) to (2.33)
         // provided by A. Rusov as a Mathematica expression
         std::array<std::array<complex<double>, 20u>, 20u>
-        A_weak_exchange(const double & mu, const double & sqrtrho) const
+        A_weak_exchange_cu(const double & mu, const double & sqrtrho) const
         {
             const double rho = sqrtrho * sqrtrho;
 
@@ -196,8 +196,8 @@ namespace eos
             const double sqrtrho = model->m_c_msbar(mu) / m_b;
             const double rho     = sqrtrho * sqrtrho;
             const auto   wc      = model->wet_dbcu(mu);
-            const auto   A_pi_cd = complex<double>(switch_pauli_interference_dbcu) * A_pauli_interference(mu, sqrtrho);
-            const auto   A_we_cu = complex<double>(switch_weak_exchange_dbcu)      * A_weak_exchange(mu, sqrtrho);
+            const auto   A_pi_cd = complex<double>(switch_pauli_interference_dbcu) * A_pauli_interference_cd(mu, sqrtrho);
+            const auto   A_we_cu = complex<double>(switch_weak_exchange_dbcu)      * A_weak_exchange_cu(mu, sqrtrho);
 
             // transforming the Wilson coefficients from the EOS basis
             // to the basis used in [LMPR:2022A], eqs. (2.1) to (2.6).
@@ -238,8 +238,8 @@ namespace eos
             const double sqrtrho = model->m_c_msbar(mu) / m_b;
             const double rho     = sqrtrho * sqrtrho;
             const auto   wc      = model->wet_sbcu(mu);
-            const auto   A_pi_cs = complex<double>(switch_pauli_interference_sbcu) * A_pauli_interference(mu, sqrtrho);
-            const auto   A_we_cu = complex<double>(switch_weak_exchange_sbcu)      * A_weak_exchange(mu, sqrtrho);
+            const auto   A_pi_cs = complex<double>(switch_pauli_interference_sbcu) * A_pauli_interference_cd(mu, sqrtrho);
+            const auto   A_we_cu = complex<double>(switch_weak_exchange_sbcu)      * A_weak_exchange_cu(mu, sqrtrho);
 
             // transforming the Wilson coefficients from the EOS basis
             // to the basis used in [LMPR:2022A], eqs. (2.1) to (2.6).
