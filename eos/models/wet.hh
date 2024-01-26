@@ -302,6 +302,22 @@ namespace eos
             virtual WilsonCoefficients<wc::DBCU> wet_dbcu(const bool & cp_conjugate) const;
     };
 
+    template <>
+    class WilsonScanComponent<components::WET::SBCC> :
+    public virtual ModelComponent<components::WET::SBCC>
+    {
+        private:
+            /* sbcc Wilson coefficients */
+            std::array<std::tuple<UsedParameter, UsedParameter>, 20> _sbcc_parameters;
+
+
+        public:
+            WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
+
+            /* sbnunu Wilson coefficients */
+            virtual WilsonCoefficients<wc::SBCC> wet_sbcc(const bool & cp_conjugate) const;
+    };
+
     /*!
      * A model with all possible operators; their Wilson coefficients
      * are allowed to have arbitrary values.
@@ -316,7 +332,8 @@ namespace eos
         public WilsonScanComponent<components::WET::CBLNu>,
         public WilsonScanComponent<components::WET::SBNuNu>,
         public WilsonScanComponent<components::WET::SBCU>,
-        public WilsonScanComponent<components::WET::DBCU>
+        public WilsonScanComponent<components::WET::DBCU>,
+        public WilsonScanComponent<components::WET::SBCC>
     {
         public:
             WilsonScanModel(const Parameters &, const Options &);
@@ -349,7 +366,8 @@ namespace eos
         public WilsonScanComponent<components::WET::CBLNu>,
         public WilsonScanComponent<components::WET::SBNuNu>,
         public WilsonScanComponent<components::WET::SBCU>,
-        public WilsonScanComponent<components::WET::DBCU>
+        public WilsonScanComponent<components::WET::DBCU>,
+        public WilsonScanComponent<components::WET::SBCC>
     {
         public:
             ConstrainedWilsonScanModel(const Parameters &, const Options &);
