@@ -44,11 +44,13 @@ namespace eos
 
         UsedParameter mu_dbcu;
         UsedParameter mu_sbcu;
+        UsedParameter mu_sbcc;
 
         double switch_pauli_interference_dbcu;
         double switch_pauli_interference_sbcu;
         double switch_weak_exchange_dbcu;
         double switch_weak_exchange_sbcu;
+        double switch_weak_exchange_sbcc;
 
         static const std::vector<OptionSpecification> options;
 
@@ -61,7 +63,8 @@ namespace eos
             m_B(p["mass::B_" + opt_q.str()], u),
             f_B(p["decay-constant::B_" + opt_q.str()], u),
             mu_dbcu(p["dbcu::mu"], u),
-            mu_sbcu(p["sbcu::mu"], u)
+            mu_sbcu(p["sbcu::mu"], u),
+            mu_sbcc(p["sbcc::mu"], u)
         {
             Context ctx("When constructing a B meson lifetime observable");
 
@@ -72,18 +75,21 @@ namespace eos
                     switch_pauli_interference_sbcu = 1.0;
                     switch_weak_exchange_dbcu      = 0.0;
                     switch_weak_exchange_sbcu      = 0.0;
+                    switch_weak_exchange_sbcc      = 0.0;
                     break;
                 case QuarkFlavor::down:
                     switch_pauli_interference_dbcu = 0.0;
                     switch_pauli_interference_sbcu = 0.0;
                     switch_weak_exchange_dbcu      = 1.0;
                     switch_weak_exchange_sbcu      = 0.0;
+                    switch_weak_exchange_sbcc      = 0.0;
                     break;
                 case QuarkFlavor::strange:
                     switch_pauli_interference_dbcu = 0.0;
                     switch_pauli_interference_sbcu = 0.0;
                     switch_weak_exchange_dbcu      = 0.0;
                     switch_weak_exchange_sbcu      = 1.0;
+                    switch_weak_exchange_sbcc      = 1.0;
                     break;
                 default:
                     throw InternalError("Invalid quark flavor: " + stringify(opt_q.value()));
@@ -189,6 +195,56 @@ namespace eos
             return result;
         }
 
+        // cf. [LMPR:2022A], eqs. (A.2) to (A.7)
+        // provided by A. Rusov as a Mathematica expression
+        std::array<std::array<complex<double>, 20u>, 20u>
+        A_weak_exchange_cc(const double & mu, const double & sqrtrho) const
+        {
+            const double rho = sqrtrho * sqrtrho;
+
+            // Matrix elements of operators [bbar Gamma q] [qbar Gamma b]
+            // are only known from HQET sum rules. For the time being use,
+            // constant values for these matrix elements, mostly following
+            // [LMPR:2022A]. For the matrix elements vanishing in vacuum
+            // insertion approximation, we use 10% as the naive bag factor.
+            const double me  =  f_B * f_B * m_B * m_B;
+            const double me1 =  1.0 * me;
+            const double me2 =  1.0 * me;
+            const double me3 =  0.1 * me;
+            const double me4 =  0.1 * me;
+            const double me5 = -1.0 * me;
+            const double me6 = -1.0 * me;
+            const double me7 =  0.1 * me;
+            const double me8 =  0.1 * me;
+
+            std::array<std::array<complex<double>, 20u>, 20u> result
+            {{
+                {(me2 + me1*(-1 + rho) + 2*me2*rho + 6*(me4 + me3*(-1 + rho) + 2*me4*rho))/3.,me2 + me1*(-1 + rho) + 2*me2*rho,-((me2 + 6*me4)*sqrtrho),-3*me2*sqrtrho,((me1 + 6*me3)*rho)/2.,(3*me1*rho)/2.,((me1 + 6*me3)*sqrtrho)/4.,(3*me1*sqrtrho)/4.,-((me1 - 4*me2 + 6*(me3 - 4*me4))*sqrtrho),-3*(me1 - 4*me2)*sqrtrho,-((me5 + 6*me7)*rho),-3*me5*rho,(me6 + 6*me8)*sqrtrho,3*me6*sqrtrho,(me5 - me5*rho - me6*(1 + 2*rho) - 6*(me8 + me7*(-1 + rho) + 2*me8*rho))/6.,(me5 - me5*rho - me6*(1 + 2*rho))/2.,((me5 - 2*(me6 - 3*me7 + 6*me8))*sqrtrho)/4.,(3*(me5 - 2*me6)*sqrtrho)/4.,-((me5 + 2*(me6 + 3*me7 + 6*me8))*sqrtrho),-3*(me5 + 2*me6)*sqrtrho},
+                {me2 + me1*(-1 + rho) + 2*me2*rho,3*(me2 + me1*(-1 + rho) + 2*me2*rho),-3*me2*sqrtrho,-9*me2*sqrtrho,(3*me1*rho)/2.,(9*me1*rho)/2.,(3*me1*sqrtrho)/4.,(9*me1*sqrtrho)/4.,-3*(me1 - 4*me2)*sqrtrho,-9*(me1 - 4*me2)*sqrtrho,-3*me5*rho,-9*me5*rho,3*me6*sqrtrho,9*me6*sqrtrho,(me5 - me5*rho - me6*(1 + 2*rho))/2.,(-3*(me6 + me5*(-1 + rho) + 2*me6*rho))/2.,(3*(me5 - 2*me6)*sqrtrho)/4.,(9*(me5 - 2*me6)*sqrtrho)/4.,-3*(me5 + 2*me6)*sqrtrho,-9*(me5 + 2*me6)*sqrtrho},
+                {-((me2 + 6*me4)*sqrtrho),-3*me2*sqrtrho,-2*(me2 + 6*me4)*(-1 + 2*rho),-6*me2*(-1 + 2*rho),-0.5*((me2 + 6*me4)*sqrtrho),(-3*me2*sqrtrho)/2.,-((me2 + 6*me4)*rho),-3*me2*rho,-12*(me2 + 6*me4)*rho,-36*me2*rho,(me6 + 6*me8)*sqrtrho,3*me6*sqrtrho,-4*(me6 + 6*me8)*rho,-12*me6*rho,((me6 + 6*me8)*sqrtrho)/2.,(3*me6*sqrtrho)/2.,-0.5*((me6 + 6*me8)*(-1 + 2*rho)),me6*(1.5 - 3*rho),-6*(me6 + 6*me8)*(-1 + 2*rho),-18*me6*(-1 + 2*rho)},
+                {-3*me2*sqrtrho,-9*me2*sqrtrho,-6*me2*(-1 + 2*rho),-18*me2*(-1 + 2*rho),(-3*me2*sqrtrho)/2.,(-9*me2*sqrtrho)/2.,-3*me2*rho,-9*me2*rho,-36*me2*rho,-108*me2*rho,3*me6*sqrtrho,9*me6*sqrtrho,-12*me6*rho,-36*me6*rho,(3*me6*sqrtrho)/2.,(9*me6*sqrtrho)/2.,me6*(1.5 - 3*rho),me6*(4.5 - 9*rho),-18*me6*(-1 + 2*rho),-54*me6*(-1 + 2*rho)},
+                {((me1 + 6*me3)*rho)/2.,(3*me1*rho)/2.,-0.5*((me2 + 6*me4)*sqrtrho),(-3*me2*sqrtrho)/2.,(me2 + me1*(-1 + rho) + 2*me2*rho + 6*(me4 + me3*(-1 + rho) + 2*me4*rho))/12.,(me2 + me1*(-1 + rho) + 2*me2*rho)/4.,-0.125*((me1 - 2*(me2 - 3*me3 + 6*me4))*sqrtrho),(-3*(me1 - 2*me2)*sqrtrho)/8.,((me1 + 2*(me2 + 3*me3 + 6*me4))*sqrtrho)/2.,(3*(me1 + 2*me2)*sqrtrho)/2.,(me5 - me5*rho - me6*(1 + 2*rho) - 6*(me8 + me7*(-1 + rho) + 2*me8*rho))/6.,(me5 - me5*rho - me6*(1 + 2*rho))/2.,((me6 + 6*me8)*sqrtrho)/2.,(3*me6*sqrtrho)/2.,-0.25*((me5 + 6*me7)*rho),(-3*me5*rho)/4.,-0.125*((me5 + 6*me7)*sqrtrho),(-3*me5*sqrtrho)/8.,((me5 - 4*me6 + 6*(me7 - 4*me8))*sqrtrho)/2.,(3*(me5 - 4*me6)*sqrtrho)/2.},
+                {(3*me1*rho)/2.,(9*me1*rho)/2.,(-3*me2*sqrtrho)/2.,(-9*me2*sqrtrho)/2.,(me2 + me1*(-1 + rho) + 2*me2*rho)/4.,(3*(me2 + me1*(-1 + rho) + 2*me2*rho))/4.,(-3*(me1 - 2*me2)*sqrtrho)/8.,(-9*(me1 - 2*me2)*sqrtrho)/8.,(3*(me1 + 2*me2)*sqrtrho)/2.,(9*(me1 + 2*me2)*sqrtrho)/2.,(me5 - me5*rho - me6*(1 + 2*rho))/2.,(-3*(me6 + me5*(-1 + rho) + 2*me6*rho))/2.,(3*me6*sqrtrho)/2.,(9*me6*sqrtrho)/2.,(-3*me5*rho)/4.,(-9*me5*rho)/4.,(-3*me5*sqrtrho)/8.,(-9*me5*sqrtrho)/8.,(3*(me5 - 4*me6)*sqrtrho)/2.,(9*(me5 - 4*me6)*sqrtrho)/2.},
+                {((me1 + 6*me3)*sqrtrho)/4.,(3*me1*sqrtrho)/4.,-((me2 + 6*me4)*rho),-3*me2*rho,-0.125*((me1 - 2*(me2 - 3*me3 + 6*me4))*sqrtrho),(-3*(me1 - 2*me2)*sqrtrho)/8.,(-4*me2*(-1 + rho) - me1*(1 + 2*rho) - 6*(me3 + 4*me4*(-1 + rho) + 2*me3*rho))/24.,(-4*me2*(-1 + rho) - me1*(1 + 2*rho))/8.,(me1 + me2*(8 - 20*rho) + 2*me1*rho + 6*(me3 + 8*me4 + 2*me3*rho - 20*me4*rho))/6.,2*me2*(2 - 5*rho) + me1*(0.5 + rho),((me5 - 2*(me6 - 3*me7 + 6*me8))*sqrtrho)/4.,(3*(me5 - 2*me6)*sqrtrho)/4.,-0.5*((me6 + 6*me8)*(-1 + 2*rho)),me6*(1.5 - 3*rho),-0.125*((me5 + 6*me7)*sqrtrho),(-3*me5*sqrtrho)/8.,-0.25*((me5 + 6*me7)*rho),(-3*me5*rho)/4.,(me5 - 4*me6 + 6*(me7 - 4*me8))*rho,3*(me5 - 4*me6)*rho},
+                {(3*me1*sqrtrho)/4.,(9*me1*sqrtrho)/4.,-3*me2*rho,-9*me2*rho,(-3*(me1 - 2*me2)*sqrtrho)/8.,(-9*(me1 - 2*me2)*sqrtrho)/8.,(-4*me2*(-1 + rho) - me1*(1 + 2*rho))/8.,(-3*(me1 + 4*me2*(-1 + rho) + 2*me1*rho))/8.,2*me2*(2 - 5*rho) + me1*(0.5 + rho),(3*(me1 + 4*me2*(2 - 5*rho) + 2*me1*rho))/2.,(3*(me5 - 2*me6)*sqrtrho)/4.,(9*(me5 - 2*me6)*sqrtrho)/4.,me6*(1.5 - 3*rho),me6*(4.5 - 9*rho),(-3*me5*sqrtrho)/8.,(-9*me5*sqrtrho)/8.,(-3*me5*rho)/4.,(-9*me5*rho)/4.,3*(me5 - 4*me6)*rho,9*(me5 - 4*me6)*rho},
+                {-((me1 - 4*me2 + 6*(me3 - 4*me4))*sqrtrho),-3*(me1 - 4*me2)*sqrtrho,-12*(me2 + 6*me4)*rho,-36*me2*rho,((me1 + 2*(me2 + 3*me3 + 6*me4))*sqrtrho)/2.,(3*(me1 + 2*me2)*sqrtrho)/2.,(me1 + me2*(8 - 20*rho) + 2*me1*rho + 6*(me3 + 8*me4 + 2*me3*rho - 20*me4*rho))/6.,2*me2*(2 - 5*rho) + me1*(0.5 + rho),(-2*(me1 + 2*me1*rho + 4*me2*(-7 + 13*rho) + 6*(me3 - 28*me4 + 2*me3*rho + 52*me4*rho)))/3.,-2*(me1 + 2*me1*rho + 4*me2*(-7 + 13*rho)),-((me5 + 2*(me6 + 3*me7 + 6*me8))*sqrtrho),-3*(me5 + 2*me6)*sqrtrho,-6*(me6 + 6*me8)*(-1 + 2*rho),-18*me6*(-1 + 2*rho),((me5 - 4*me6 + 6*(me7 - 4*me8))*sqrtrho)/2.,(3*(me5 - 4*me6)*sqrtrho)/2.,(me5 - 4*me6 + 6*(me7 - 4*me8))*rho,3*(me5 - 4*me6)*rho,-4*(me5 + 8*me6 + 6*(me7 + 8*me8))*rho,-12*(me5 + 8*me6)*rho},
+                {-3*(me1 - 4*me2)*sqrtrho,-9*(me1 - 4*me2)*sqrtrho,-36*me2*rho,-108*me2*rho,(3*(me1 + 2*me2)*sqrtrho)/2.,(9*(me1 + 2*me2)*sqrtrho)/2.,2*me2*(2 - 5*rho) + me1*(0.5 + rho),(3*(me1 + 4*me2*(2 - 5*rho) + 2*me1*rho))/2.,-2*(me1 + 2*me1*rho + 4*me2*(-7 + 13*rho)),-6*(me1 + 2*me1*rho + 4*me2*(-7 + 13*rho)),-3*(me5 + 2*me6)*sqrtrho,-9*(me5 + 2*me6)*sqrtrho,-18*me6*(-1 + 2*rho),-54*me6*(-1 + 2*rho),(3*(me5 - 4*me6)*sqrtrho)/2.,(9*(me5 - 4*me6)*sqrtrho)/2.,3*(me5 - 4*me6)*rho,9*(me5 - 4*me6)*rho,-12*(me5 + 8*me6)*rho,-36*(me5 + 8*me6)*rho},
+                {-((me5 + 6*me7)*rho),-3*me5*rho,(me6 + 6*me8)*sqrtrho,3*me6*sqrtrho,(me5 - me5*rho - me6*(1 + 2*rho) - 6*(me8 + me7*(-1 + rho) + 2*me8*rho))/6.,(me5 - me5*rho - me6*(1 + 2*rho))/2.,((me5 - 2*(me6 - 3*me7 + 6*me8))*sqrtrho)/4.,(3*(me5 - 2*me6)*sqrtrho)/4.,-((me5 + 2*(me6 + 3*me7 + 6*me8))*sqrtrho),-3*(me5 + 2*me6)*sqrtrho,(me2 + me1*(-1 + rho) + 2*me2*rho + 6*(me4 + me3*(-1 + rho) + 2*me4*rho))/3.,me2 + me1*(-1 + rho) + 2*me2*rho,-((me2 + 6*me4)*sqrtrho),-3*me2*sqrtrho,((me1 + 6*me3)*rho)/2.,(3*me1*rho)/2.,((me1 + 6*me3)*sqrtrho)/4.,(3*me1*sqrtrho)/4.,-((me1 - 4*me2 + 6*(me3 - 4*me4))*sqrtrho),-3*(me1 - 4*me2)*sqrtrho},
+                {-3*me5*rho,-9*me5*rho,3*me6*sqrtrho,9*me6*sqrtrho,(me5 - me5*rho - me6*(1 + 2*rho))/2.,(-3*(me6 + me5*(-1 + rho) + 2*me6*rho))/2.,(3*(me5 - 2*me6)*sqrtrho)/4.,(9*(me5 - 2*me6)*sqrtrho)/4.,-3*(me5 + 2*me6)*sqrtrho,-9*(me5 + 2*me6)*sqrtrho,me2 + me1*(-1 + rho) + 2*me2*rho,3*(me2 + me1*(-1 + rho) + 2*me2*rho),-3*me2*sqrtrho,-9*me2*sqrtrho,(3*me1*rho)/2.,(9*me1*rho)/2.,(3*me1*sqrtrho)/4.,(9*me1*sqrtrho)/4.,-3*(me1 - 4*me2)*sqrtrho,-9*(me1 - 4*me2)*sqrtrho},
+                {(me6 + 6*me8)*sqrtrho,3*me6*sqrtrho,-4*(me6 + 6*me8)*rho,-12*me6*rho,((me6 + 6*me8)*sqrtrho)/2.,(3*me6*sqrtrho)/2.,-0.5*((me6 + 6*me8)*(-1 + 2*rho)),me6*(1.5 - 3*rho),-6*(me6 + 6*me8)*(-1 + 2*rho),-18*me6*(-1 + 2*rho),-((me2 + 6*me4)*sqrtrho),-3*me2*sqrtrho,-2*(me2 + 6*me4)*(-1 + 2*rho),-6*me2*(-1 + 2*rho),-0.5*((me2 + 6*me4)*sqrtrho),(-3*me2*sqrtrho)/2.,-((me2 + 6*me4)*rho),-3*me2*rho,-12*(me2 + 6*me4)*rho,-36*me2*rho},
+                {3*me6*sqrtrho,9*me6*sqrtrho,-12*me6*rho,-36*me6*rho,(3*me6*sqrtrho)/2.,(9*me6*sqrtrho)/2.,me6*(1.5 - 3*rho),me6*(4.5 - 9*rho),-18*me6*(-1 + 2*rho),-54*me6*(-1 + 2*rho),-3*me2*sqrtrho,-9*me2*sqrtrho,-6*me2*(-1 + 2*rho),-18*me2*(-1 + 2*rho),(-3*me2*sqrtrho)/2.,(-9*me2*sqrtrho)/2.,-3*me2*rho,-9*me2*rho,-36*me2*rho,-108*me2*rho},
+                {(me5 - me5*rho - me6*(1 + 2*rho) - 6*(me8 + me7*(-1 + rho) + 2*me8*rho))/6.,(me5 - me5*rho - me6*(1 + 2*rho))/2.,((me6 + 6*me8)*sqrtrho)/2.,(3*me6*sqrtrho)/2.,-0.25*((me5 + 6*me7)*rho),(-3*me5*rho)/4.,-0.125*((me5 + 6*me7)*sqrtrho),(-3*me5*sqrtrho)/8.,((me5 - 4*me6 + 6*(me7 - 4*me8))*sqrtrho)/2.,(3*(me5 - 4*me6)*sqrtrho)/2.,((me1 + 6*me3)*rho)/2.,(3*me1*rho)/2.,-0.5*((me2 + 6*me4)*sqrtrho),(-3*me2*sqrtrho)/2.,(me2 + me1*(-1 + rho) + 2*me2*rho + 6*(me4 + me3*(-1 + rho) + 2*me4*rho))/12.,(me2 + me1*(-1 + rho) + 2*me2*rho)/4.,-0.125*((me1 - 2*(me2 - 3*me3 + 6*me4))*sqrtrho),(-3*(me1 - 2*me2)*sqrtrho)/8.,((me1 + 2*(me2 + 3*me3 + 6*me4))*sqrtrho)/2.,(3*(me1 + 2*me2)*sqrtrho)/2.},
+                {(me5 - me5*rho - me6*(1 + 2*rho))/2.,(-3*(me6 + me5*(-1 + rho) + 2*me6*rho))/2.,(3*me6*sqrtrho)/2.,(9*me6*sqrtrho)/2.,(-3*me5*rho)/4.,(-9*me5*rho)/4.,(-3*me5*sqrtrho)/8.,(-9*me5*sqrtrho)/8.,(3*(me5 - 4*me6)*sqrtrho)/2.,(9*(me5 - 4*me6)*sqrtrho)/2.,(3*me1*rho)/2.,(9*me1*rho)/2.,(-3*me2*sqrtrho)/2.,(-9*me2*sqrtrho)/2.,(me2 + me1*(-1 + rho) + 2*me2*rho)/4.,(3*(me2 + me1*(-1 + rho) + 2*me2*rho))/4.,(-3*(me1 - 2*me2)*sqrtrho)/8.,(-9*(me1 - 2*me2)*sqrtrho)/8.,(3*(me1 + 2*me2)*sqrtrho)/2.,(9*(me1 + 2*me2)*sqrtrho)/2.},
+                {((me5 - 2*(me6 - 3*me7 + 6*me8))*sqrtrho)/4.,(3*(me5 - 2*me6)*sqrtrho)/4.,-0.5*((me6 + 6*me8)*(-1 + 2*rho)),me6*(1.5 - 3*rho),-0.125*((me5 + 6*me7)*sqrtrho),(-3*me5*sqrtrho)/8.,-0.25*((me5 + 6*me7)*rho),(-3*me5*rho)/4.,(me5 - 4*me6 + 6*(me7 - 4*me8))*rho,3*(me5 - 4*me6)*rho,((me1 + 6*me3)*sqrtrho)/4.,(3*me1*sqrtrho)/4.,-((me2 + 6*me4)*rho),-3*me2*rho,-0.125*((me1 - 2*(me2 - 3*me3 + 6*me4))*sqrtrho),(-3*(me1 - 2*me2)*sqrtrho)/8.,(-4*me2*(-1 + rho) - me1*(1 + 2*rho) - 6*(me3 + 4*me4*(-1 + rho) + 2*me3*rho))/24.,(-4*me2*(-1 + rho) - me1*(1 + 2*rho))/8.,(me1 + me2*(8 - 20*rho) + 2*me1*rho + 6*(me3 + 8*me4 + 2*me3*rho - 20*me4*rho))/6.,2*me2*(2 - 5*rho) + me1*(0.5 + rho)},
+                {(3*(me5 - 2*me6)*sqrtrho)/4.,(9*(me5 - 2*me6)*sqrtrho)/4.,me6*(1.5 - 3*rho),me6*(4.5 - 9*rho),(-3*me5*sqrtrho)/8.,(-9*me5*sqrtrho)/8.,(-3*me5*rho)/4.,(-9*me5*rho)/4.,3*(me5 - 4*me6)*rho,9*(me5 - 4*me6)*rho,(3*me1*sqrtrho)/4.,(9*me1*sqrtrho)/4.,-3*me2*rho,-9*me2*rho,(-3*(me1 - 2*me2)*sqrtrho)/8.,(-9*(me1 - 2*me2)*sqrtrho)/8.,(-4*me2*(-1 + rho) - me1*(1 + 2*rho))/8.,(-3*(me1 + 4*me2*(-1 + rho) + 2*me1*rho))/8.,2*me2*(2 - 5*rho) + me1*(0.5 + rho),(3*(me1 + 4*me2*(2 - 5*rho) + 2*me1*rho))/2.},
+                {-((me5 + 2*(me6 + 3*me7 + 6*me8))*sqrtrho),-3*(me5 + 2*me6)*sqrtrho,-6*(me6 + 6*me8)*(-1 + 2*rho),-18*me6*(-1 + 2*rho),((me5 - 4*me6 + 6*(me7 - 4*me8))*sqrtrho)/2.,(3*(me5 - 4*me6)*sqrtrho)/2.,(me5 - 4*me6 + 6*(me7 - 4*me8))*rho,3*(me5 - 4*me6)*rho,-4*(me5 + 8*me6 + 6*(me7 + 8*me8))*rho,-12*(me5 + 8*me6)*rho,-((me1 - 4*me2 + 6*(me3 - 4*me4))*sqrtrho),-3*(me1 - 4*me2)*sqrtrho,-12*(me2 + 6*me4)*rho,-36*me2*rho,((me1 + 2*(me2 + 3*me3 + 6*me4))*sqrtrho)/2.,(3*(me1 + 2*me2)*sqrtrho)/2.,(me1 + me2*(8 - 20*rho) + 2*me1*rho + 6*(me3 + 8*me4 + 2*me3*rho - 20*me4*rho))/6.,2*me2*(2 - 5*rho) + me1*(0.5 + rho),(-2*(me1 + 2*me1*rho + 4*me2*(-7 + 13*rho) + 6*(me3 - 28*me4 + 2*me3*rho + 52*me4*rho)))/3.,-2*(me1 + 2*me1*rho + 4*me2*(-7 + 13*rho))},
+                {-3*(me5 + 2*me6)*sqrtrho,-9*(me5 + 2*me6)*sqrtrho,-18*me6*(-1 + 2*rho),-54*me6*(-1 + 2*rho),(3*(me5 - 4*me6)*sqrtrho)/2.,(9*(me5 - 4*me6)*sqrtrho)/2.,3*(me5 - 4*me6)*rho,9*(me5 - 4*me6)*rho,-12*(me5 + 8*me6)*rho,-36*(me5 + 8*me6)*rho,-3*(me1 - 4*me2)*sqrtrho,-9*(me1 - 4*me2)*sqrtrho,-36*me2*rho,-108*me2*rho,(3*(me1 + 2*me2)*sqrtrho)/2.,(9*(me1 + 2*me2)*sqrtrho)/2.,2*me2*(2 - 5*rho) + me1*(0.5 + rho),(3*(me1 + 4*me2*(2 - 5*rho) + 2*me1*rho))/2.,-2*(me1 + 2*me1*rho + 4*me2*(-7 + 13*rho)),-6*(me1 + 2*me1*rho + 4*me2*(-7 + 13*rho))}
+            }};
+
+            return result;
+        }
+
+
         double decay_width_dbcu() const
         {
             const double mu      = mu_dbcu();
@@ -269,6 +325,47 @@ namespace eos
             const double ckm = abs(model->ckm_us() * model->ckm_cb());
 
             const auto A = A_pi_cs + A_we_cu;
+
+            return power_of<2>(g_fermi * m_b * ckm * (1.0 - rho)) / (12.0 * m_B * M_PI * hbar) * real(dot(Cconj, (A * C))) * 1.0e-12;
+        }
+
+        double decay_width_sbcc() const
+        {
+            const double mu      = mu_sbcc();
+            const double m_b     = model->m_b_msbar(mu);
+            const double sqrtrho = model->m_c_msbar(mu) / m_b;
+            const double rho     = sqrtrho * sqrtrho;
+            const auto   wc      = model->wet_sbcc(mu);
+            const auto   A_we_cc = complex<double>(switch_weak_exchange_sbcc)      * A_weak_exchange_cc(mu, sqrtrho);
+
+            // transforming the Wilson coefficients from the EOS basis
+            // to the basis used in [LMPR:2022A], eqs. (2.1) to (2.6) (with the replacement u->c, d->s)
+            const std::array<std::complex<double>, 20u> C
+            {
+                wc.c2() / 2.0 + 8.0 * wc.c4(),
+                wc.c1() - wc.c2() / 6.0 + 16.0 * wc.c3() - (8.0 * wc.c4()) / 3.0,
+                -4.0 * wc.c10() - wc.c6() / 4.0,
+                1.0 / 12.0 * (16.0 * wc.c10() - 6.0 * wc.c5() + wc.c6() - 96.0 * wc.c9()),
+                -wc.c2() - 4.0 * wc.c4(),
+                1.0 / 3.0 * (-6.0 * wc.c1() + wc.c2() + 4.0 * (wc.c4() - 6.0 * wc.c3())),
+                32.0 * wc.c10() - wc.c6() / 4.0 - 3.0 * wc.c8(),
+                -((32.0 * wc.c10()) / 3.0) - wc.c5() / 2.0 + wc.c6() / 12.0 - 6.0 * wc.c7() + wc.c8() + 64.0 * wc.c9(),
+                -8.0 * wc.c10() - wc.c6() / 16.0 + wc.c8() / 4.0,
+                1.0 / 48.0 * (128.0 * wc.c10() - 6.0 * wc.c5() + wc.c6() + 24.0 * wc.c7() - 4.0 * wc.c8() - 768.0 * wc.c9()),
+                wc.c2p() / 2.0 + 8.0 * wc.c4p(), wc.c1p() - wc.c2p() / 6.0 + 16.0 * wc.c3p() - (8.0 * wc.c4p()) / 3.0,
+                -4.0 * wc.c10p() - wc.c6p() / 4.0, 1.0 / 12.0 * (16.0 * wc.c10p() - 6.0 * wc.c5p() + wc.c6p() - 96.0 * wc.c9p()),
+                -wc.c2p() - 4.0 * wc.c4p(),
+                1.0 / 3.0 * (-6.0 * wc.c1p() + wc.c2p() + 4.0 * (wc.c4p() - 6.0 * wc.c3p())), 32.0 * wc.c10p() - wc.c6p() / 4.0 - 3.0 * wc.c8p(),
+                -((32.0 * wc.c10p()) / 3.0) - wc.c5p() / 2.0 + wc.c6p() / 12.0 - 6.0 * wc.c7p() + wc.c8p() + 64.0 * wc.c9p(),
+                -8.0 * wc.c10p() - wc.c6p() / 16.0 + wc.c8p() / 4.0, 1.0 / 48.0 * (128.0 * wc.c10p() - 6.0 * wc.c5p() + wc.c6p() + 24.0 * wc.c7p() - 4.0 * wc.c8p() - 768.0 * wc.c9p())
+            };
+            std::array<std::complex<double>, 20u> Cconj;
+            complex<double> (*conj)(const std::complex<double> &) = &std::conj<double>;
+            std::transform(C.cbegin(), C.cend(), Cconj.begin(), conj);
+
+            const double ckm = abs(model->ckm_cs() * model->ckm_cb());
+
+            const auto A = A_we_cc;
 
             return power_of<2>(g_fermi * m_b * ckm * (1.0 - rho)) / (12.0 * m_B * M_PI * hbar) * real(dot(Cconj, (A * C))) * 1.0e-12;
         }

@@ -39,6 +39,7 @@ namespace eos
             // Observables
             double decay_width_dbcu() const;
             double decay_width_sbcu() const;
+            double decay_width_sbcc() const;
 
             /*!
              * References used in the computation of our observables.
