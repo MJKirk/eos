@@ -41,7 +41,7 @@ namespace eos
 
         UsedParameter g_fermi;
 
-        SwitchOption opt_q;
+        QuarkFlavorOption opt_q;
 
         UsedParameter m_B;
         UsedParameter m_b;
@@ -65,17 +65,17 @@ namespace eos
             mu_sb(p["sb::mu"], u),
             hbar(p["QM::hbar"], u),
             g_fermi(p["WET::G_Fermi"], u),
-            opt_q(o, "q", {"s"}),
-            m_B(p["mass::B_" + opt_q.value()], u),
+            opt_q(o, options, "q"),
+            m_B(p["mass::B_" + opt_q.str()], u),
             m_b(p["mass::b(MSbar)"], u),
-            m_q(p["mass::" + opt_q.value() + "(2GeV)"], u),
-            f_B(p["decay-constant::B_" + opt_q.value()], u),
-            tau_B(p["life_time::B_" + opt_q.value()], u),
-            R_1(p["B_" + opt_q.value() + "<->Bbar_" + opt_q.value() + "::R^1"], u),
-            R_2(p["B_" + opt_q.value() + "<->Bbar_" + opt_q.value() + "::R^2"], u),
-            R_3(p["B_" + opt_q.value() + "<->Bbar_" + opt_q.value() + "::R^3"], u),
-            R_4(p["B_" + opt_q.value() + "<->Bbar_" + opt_q.value() + "::R^4"], u),
-            R_5(p["B_" + opt_q.value() + "<->Bbar_" + opt_q.value() + "::R^5"], u)
+            m_q(p["mass::" + opt_q.str() + "(2GeV)"], u),
+            f_B(p["decay-constant::B_" + opt_q.str()], u),
+            tau_B(p["life_time::B_" + opt_q.str()], u),
+            R_1(p["B_" + opt_q.str() + "<->Bbar_" + opt_q.str() + "::R^1"], u),
+            R_2(p["B_" + opt_q.str() + "<->Bbar_" + opt_q.str() + "::R^2"], u),
+            R_3(p["B_" + opt_q.str() + "<->Bbar_" + opt_q.str() + "::R^3"], u),
+            R_4(p["B_" + opt_q.str() + "<->Bbar_" + opt_q.str() + "::R^4"], u),
+            R_5(p["B_" + opt_q.str() + "<->Bbar_" + opt_q.str() + "::R^5"], u)
         {
             u.uses(*model);
         }
