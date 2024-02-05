@@ -27,17 +27,28 @@ namespace eos
     // B_q-Bbar_q mixing
     // {{{
     ObservableGroup
+    make_bq_mixing_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $B_q$--$\bar{B}_q$ mixing)",
+            R"()",
+            {
+                make_observable("B_q<->Bbar_q::DeltaM", R"(\Delta M_q(B_q\leftrightarrow \bar{B}_q))",
+                        Unit::InversePicoSecond(),
+                        &BMixing::delta_m),
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+
+    ObservableGroup
     make_bs_mixing_group()
     {
         auto imp = new Implementation<ObservableGroup>(
             R"(Observables in $B_s$--$\bar{B}_s$ mixing)",
             R"()",
             {
-                make_observable("B_s<->Bbar_s::DeltaM", R"(\Delta M_s(B_s\leftrightarrow \bar{B}_s))",
-                        Unit::InversePicoSecond(),
-                        &BMixing::delta_m,
-                        std::make_tuple(),
-                        Options{ { "q", "s" } }),
                 make_observable("B_s<->Bbar_s::DeltaGamma", R"(\Delta \Gamma_s(B_s\leftrightarrow \bar{B}_s))",
                         Unit::InversePicoSecond(),
                         &BMixing::delta_gamma,
@@ -57,7 +68,9 @@ namespace eos
             "Observables in neutral meson mixing",
             "",
             {
-                // B_s <-> Bbar_s
+                // Observables implemented for both Bs and Bd
+                make_bq_mixing_group(),
+                // Observables implemented for just Bs
                 make_bs_mixing_group(),
             }
         );

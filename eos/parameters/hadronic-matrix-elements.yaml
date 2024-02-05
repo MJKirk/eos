@@ -40,6 +40,36 @@ groups:
           max:     +0.50525
           unit:     '1'
           latex:    '$R_5^{B_s\leftrightarrow \bar{B}_s}$'
+      'B_d<->Bbar_d::R^1' :
+          central: +0.5375
+          min:     +0.51
+          max:     +0.565
+          unit:     '1'
+          latex:    '$R_1^{B_d\leftrightarrow \bar{B}_d}$'
+      'B_d<->Bbar_d::R^2' :
+          central: -0.515
+          min:     -0.5425
+          max:     -0.4875
+          unit:     '1'
+          latex:    '$R_2^{B_d\leftrightarrow \bar{B}_d}$'
+      'B_d<->Bbar_d::R^3' :
+          central: +0.100
+          min:     +0.0925
+          max:     +0.1075
+          unit:     '1'
+          latex:    '$R_3^{B_d\leftrightarrow \bar{B}_d}$'
+      'B_d<->Bbar_d::R^4' :
+          central: +0.955
+          min:     +0.91
+          max:     +0.1
+          unit:     '1'
+          latex:    '$R_4^{B_d\leftrightarrow \bar{B}_d}$'
+      'B_d<->Bbar_d::R^5' :
+          central: +0.50375
+          min:     +0.48075
+          max:     +0.52675
+          unit:     '1'
+          latex:    '$R_5^{B_d\leftrightarrow \bar{B}_d}$'
   # }}}
 
   # Masses used in BSZ-like Form Factor Parametrizations

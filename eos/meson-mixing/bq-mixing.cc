@@ -59,6 +59,9 @@ namespace eos
 
         static const std::vector<OptionSpecification> options;
 
+        std::function<complex<double> (const Model *)> lambda_tq;
+        std::function<complex<double> (const Model *)> lambda_cq;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
             mu_sbsb(p["sbsb::mu"], u),
@@ -77,12 +80,34 @@ namespace eos
             R_4(p["B_" + opt_q.str() + "<->Bbar_" + opt_q.str() + "::R^4"], u),
             R_5(p["B_" + opt_q.str() + "<->Bbar_" + opt_q.str() + "::R^5"], u)
         {
+            Context ctx("When constructing B_q<->Bbar_q observables");
+
+            switch (opt_q.value())
+            {
+                case QuarkFlavor::down:
+                    lambda_tq = &lambda_t_d;
+                    break;
+                case QuarkFlavor::strange:
+                    lambda_tq = &lambda_t_s;
+                    break;
+                default:
+                    // meson mixing can only occur in neutral B mesons
+                    throw InternalError("BMesonMixing: q = '" + opt_q.str() + "' is not a valid option for B meson mixing");
+            }
+
             u.uses(*model);
         }
+
+        // CKM factors
+        static complex<double> lambda_t_d(const Model * model) { return model->ckm_tb() * conj(model->ckm_td()); }
+        static complex<double> lambda_t_s(const Model * model) { return model->ckm_tb() * conj(model->ckm_ts()); }
+
 
         complex<double> M_12() const
         {
             const auto wc = model->wet_sbsb();
+
+            double lambda_t = abs(lambda_tq(model.get()));
 
             // cf. [DDHLMSW:2019A]
             // TODO: still needs to be evolved to scale mu from reference scale 4.2 GeV.
@@ -104,8 +129,7 @@ namespace eos
             }
 
             // cf. [BBL:1995A], eq. (XVIII.17), p. 153
-            return 4.0 * g_fermi / std::sqrt(2.0) * power_of<2>(model->ckm_tb() * std::conj(model->ckm_ts()))
-                * f_B() * f_B() * m_B() / 2.0 * result;
+            return 4.0 * g_fermi / std::sqrt(2.0) * power_of<2>(lambda_t) * f_B() * f_B() * m_B() / 2.0 * result;
 
         }
 
@@ -205,6 +229,8 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<BMixing>::options
     {
+        Model::option_specification(),
+        {"q", { "d", "s" }, "s"}
     };
 
     BMixing::BMixing(const Parameters & parameters, const Options & options) :
