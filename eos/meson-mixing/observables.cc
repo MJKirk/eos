@@ -38,6 +38,11 @@ namespace eos
                         &BMixing::delta_m,
                         std::make_tuple(),
                         Options{ { "q", "s" } }),
+                make_observable("B_s<->Bbar_s::DeltaGamma", R"(\Delta \Gamma_s(B_s\leftrightarrow \bar{B}_s))",
+                        Unit::InversePicoSecond(),
+                        &BMixing::delta_gamma,
+                        std::make_tuple(),
+                        Options{ { "q", "s" } }),
             }
         );
 

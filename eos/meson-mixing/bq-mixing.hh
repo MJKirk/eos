@@ -38,6 +38,7 @@ namespace eos
 
             // Observables
             double delta_m() const;
+            double delta_gamma() const;
 
             /*!
              * References used in the computation of our observables.
