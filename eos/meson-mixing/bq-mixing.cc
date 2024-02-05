@@ -44,8 +44,6 @@ namespace eos
         QuarkFlavorOption opt_q;
 
         UsedParameter m_B;
-        UsedParameter m_b;
-        UsedParameter m_q;
 
         UsedParameter f_B;
 
@@ -70,8 +68,6 @@ namespace eos
             g_fermi(p["WET::G_Fermi"], u),
             opt_q(o, options, "q"),
             m_B(p["mass::B_" + opt_q.str()], u),
-            m_b(p["mass::b(MSbar)"], u),
-            m_q(p["mass::" + opt_q.str() + "(2GeV)"], u),
             f_B(p["decay-constant::B_" + opt_q.str()], u),
             tau_B(p["life_time::B_" + opt_q.str()], u),
             R_1(p["B_" + opt_q.str() + "<->Bbar_" + opt_q.str() + "::R^1"], u),
@@ -143,19 +139,13 @@ namespace eos
             // Matrix elements of operators [qbar Gamma b] [qbar Gamma b] as defined in eqs. (2.40)-(2.42) of [LMPR:2022A]
             // Within HQET, there are only 6 independent operators at leading order in 1/m_b, and only 4 matrix elements
             // after accounting for the parity symmetry of QCD.
-            // The bag parameters are known from lattice QCD, and sum rules, and we take the averages
-            // from appendix D of GSSS:2022A
-            const double B1 = 0.886; // B_1^GSSS
-            const double B2 = 0.788; // B_2^GSSS
-            const double B3 = 0.926; // B_5^GSSS
-            const double B4 = 0.979; // B_4^GSSS
-            const double mass_ratio_sq = power_of<2>(m_B / (m_b + m_q));
-
+            // The bag parameters are known from lattice QCD, and sum rules
+            // Although currently we are using just the lattice QCD from DDHLMSW:2019A
             const double me  =  f_B * f_B * m_B * m_B;
-            const double me1 =  8/3 * B1 *                               me;
-            const double me2 = -5/3 * B2 *                               me;
-            const double me3 =   -1 * B3 * (  2 + 4/3 * mass_ratio_sq) * me;
-            const double me4 =    1 * B4 * (1/3 +   2 * mass_ratio_sq) * me;
+            const double me1 =  R_1() * me;
+            const double me2 =  R_2() * me;
+            const double me3 =  R_5() * me; // Since O3 in LMPR:2022A is the same as O5 in DDHLMSW:2019A
+            const double me4 =  R_4() * me;
 
             std::array<std::array<complex<double>, 20u>, 20u> result
             {{
