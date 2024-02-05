@@ -24,12 +24,12 @@
 using namespace test;
 using namespace eos;
 
-class BsMixingTest :
+class BqMixingTest :
     public TestCase
 {
     public:
-        BsMixingTest() :
-            TestCase("b_s_mixing_test")
+        BqMixingTest() :
+            TestCase("b_q_mixing_test")
         {
         }
 
@@ -47,18 +47,39 @@ class BsMixingTest :
                 p["B_s<->Bbar_s::R^3"]     =  0.10900;
                 p["B_s<->Bbar_s::R^4"]     =  0.91250;
                 p["B_s<->Bbar_s::R^5"]     =  0.48625;
-
-                Options oo
-                {
-                    { "model",        "SM"         },
-                    { "q",            "s"          },
-                };
-
-                BMixing process(p, oo);
+                p["B_d<->Bbar_d::R^1"]     =  0.5375;
+                p["B_d<->Bbar_d::R^2"]     = -0.515;
+                p["B_d<->Bbar_d::R^3"]     =  0.100;
+                p["B_d<->Bbar_d::R^4"]     =  0.955;
+                p["B_d<->Bbar_d::R^5"]     =  0.50375;
 
                 const double eps = 1.0e-5;
 
-                TEST_CHECK_RELATIVE_ERROR(17.26529, process.delta_m(), eps); // in units of ps^-1
+                // Delta M_s
+                {
+                    Options oo
+                    {
+                        { "model",        "SM"         },
+                        { "q",            "s"          },
+                    };
+
+                    BMixing process(p, oo);
+
+                    TEST_CHECK_RELATIVE_ERROR(process.delta_m(), 17.26529, eps); // in units of ps^-1
+                }
+
+                // Delta M_d
+                {
+                    Options oo
+                    {
+                        { "model",        "SM"         },
+                        { "q",            "d"          },
+                    };
+
+                    BMixing process(p, oo);
+
+                    TEST_CHECK_RELATIVE_ERROR(process.delta_m(), 0.53077, eps); // in units of ps^-1
+                }
             }
         }
-} b_s_mixing_test;
+} b_q_mixing_test;
