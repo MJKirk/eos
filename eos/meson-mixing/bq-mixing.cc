@@ -252,6 +252,8 @@ namespace eos
     const std::set<ReferenceName>
     BMixing::references
     {
+        "LMPR:2022A"_rn,
+        "ABL:2015A"_rn,
     };
 
     std::vector<OptionSpecification>::const_iterator
