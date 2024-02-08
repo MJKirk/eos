@@ -103,7 +103,7 @@ namespace eos
         {
             const auto wc = model->wet_sbsb();
 
-            double lambda_t = abs(lambda_tq(model.get()));
+            const double lambda_t = abs(lambda_tq(model.get()));
 
             // cf. [DDHLMSW:2019A]
             // TODO: still needs to be evolved to scale mu from reference scale 4.2 GeV.
