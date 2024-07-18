@@ -1,10 +1,11 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2013, 2014, 2015, 2016, 2018 Danny van Dyk
+ * Copyright (c) 2010-2024 Danny van Dyk
  * Copyright (c) 2015 Christoph Bobeth
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2019 Nico Gubernari
+ * Copyright (c) 2024 Matthew J. Kirk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -32,6 +33,7 @@
 #include <eos/form-factors/parametric-bgjvd2019.hh>
 #include <eos/form-factors/parametric-bsz2015.hh>
 #include <eos/form-factors/parametric-fvdv2018.hh>
+#include <eos/form-factors/parametric-kkrvd2024.hh>
 #include <eos/form-factors/parametric-kkvdz2022.hh>
 #include <eos/form-factors/parametric-kmpw2010.hh>
 #include <eos/utils/destringify.hh>
@@ -352,6 +354,8 @@ namespace eos
         // c -> s
         { "D->K::BSZ2015",       &BSZ2015FormFactors<DToK,   PToP>::make                                                                                      },
         { "D->K::BFW2010",       &BFW2010FormFactors<DToK,   PToP>::make                                                                                      },
+        // u,d -> u,d
+        { "pi->pi::KKRvD2024",   &KKRvD2024FormFactors<PiToPi>::make                                                                                            },
         // analytic computations
         { "B->pi::DKMMO2008",    &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down>::make                   },
         { "B_s->K::DKMMO2008",   &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::strange>::make                },
@@ -577,5 +581,56 @@ namespace eos
         }
 
         return result;
+    }
+
+    /* Vacuum -> P P Processes */
+
+    FormFactors<VacuumToPP>::~FormFactors()
+    {
+    }
+
+    double
+    FormFactors<VacuumToPP>::abs2_f_p(const double & q2) const
+    {
+        return std::norm(this->f_p(q2));
+    }
+
+    double
+    FormFactors<VacuumToPP>::arg_f_p(const double & q2) const
+    {
+        return std::arg(this->f_p(q2));
+    }
+
+    const std::map<FormFactorFactory<VacuumToPP>::KeyType, FormFactorFactory<VacuumToPP>::ValueType>
+    FormFactorFactory<VacuumToPP>::form_factors
+    {
+        { "0->pipi::KKRvD2024",     &KKRvD2024FormFactors<VacuumToPiPi>::make },
+    };
+
+    std::shared_ptr<FormFactors<VacuumToPP>>
+    FormFactorFactory<VacuumToPP>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
+    {
+        std::shared_ptr<FormFactors<VacuumToPP>> result;
+
+        auto i = FormFactorFactory<VacuumToPP>::form_factors.find(name);
+        if (FormFactorFactory<VacuumToPP>::form_factors.end() != i)
+        {
+            result.reset(i->second(parameters, name.options() + options));
+        }
+
+        return result;
+    }
+
+    OptionSpecification
+    FormFactorFactory<VacuumToPP>::option_specification(const qnp::Prefix & process)
+    {
+        OptionSpecification result { "form-factors", {}, "" };
+        for (const auto & ff : FormFactorFactory<VacuumToPP>::form_factors)
+        {
+            if (process == std::get<0>(ff).prefix_part())
+                result.allowed_values.push_back(std::get<0>(ff).name_part().str());
+        }
+
+        return { result };
     }
 }
