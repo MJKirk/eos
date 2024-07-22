@@ -43,10 +43,10 @@ namespace eos
             UsedParameter(p[_par_name("+", "1", "8")], *this),
             UsedParameter(p[_par_name("+", "1", "9")], *this)
         }},
-        _re_cr(p["pi->pi::Re{c}_(+,1)@KKRvD2024"], *this),
-        _im_cr(p["pi->pi::Im{c}_(+,1)@KKRvD2024"], *this),
-        _Mr(p["pi->pi::M_(+,1)@KKRvD2024"], *this),
-        _Gr(p["pi->pi::Gamma_(+,1)@KKRvD2024"], *this),
+        _re_c_fp_I1(p["pi->pi::Re{c}_(+,1)@KKRvD2024"], *this),
+        _im_c_fp_I1(p["pi->pi::Im{c}_(+,1)@KKRvD2024"], *this),
+        _M_fp_I1(p["pi->pi::M_(+,1)@KKRvD2024"], *this),
+        _G_fp_I1(p["pi->pi::Gamma_(+,1)@KKRvD2024"], *this),
         _m_pi(p["mass::pi^+"], *this),
         _t_0(p["pi->pi::t_0@KKRvD2024"], *this)
     {
@@ -112,14 +112,14 @@ namespace eos
         const auto series      = this->series_m(z, b);
 
         // Super-threshold pole location
-        const auto zr =  this->_zr(this->_Mr(), this->_Gr());
+        const auto zr =  this->_zr(this->_M_fp_I1(), this->_G_fp_I1());
         // Artificial FF zero interpolation value
-        const auto cr = complex<double>(this->_re_cr(), this->_im_cr());
+        const auto cr = complex<double>(this->_re_c_fp_I1(), this->_im_c_fp_I1());
 
         // Inverse Blaschke factors
         const auto B1 = this->_inverseblaschke(z, zr);
 
-        return (series * power_of<2>(std::abs(B1)) + 2 * (cr * B1).real()) /  phi; // the weight factor has been absorbed into 1 / phi
+        return (series * power_of<2>(std::abs(B1)) + 2 * real(cr * B1)) /  phi; // the weight factor has been absorbed into 1 / phi
     }
 
     double
@@ -158,10 +158,10 @@ namespace eos
             UsedParameter(p[_par_name("+", "1", "8")], *this),
             UsedParameter(p[_par_name("+", "1", "9")], *this)
         }},
-        _re_cr(p["pi->pi::Re{c}_(+,1)@KKRvD2024"], *this),
-        _im_cr(p["pi->pi::Im{c}_(+,1)@KKRvD2024"], *this),
-        _Mr(p["pi->pi::M_(+,1)@KKRvD2024"], *this),
-        _Gr(p["pi->pi::Gamma_(+,1)@KKRvD2024"], *this),
+        _re_c_fp_I1(p["pi->pi::Re{c}_(+,1)@KKRvD2024"], *this),
+        _im_c_fp_I1(p["pi->pi::Im{c}_(+,1)@KKRvD2024"], *this),
+        _M_fp_I1(p["pi->pi::M_(+,1)@KKRvD2024"], *this),
+        _G_fp_I1(p["pi->pi::Gamma_(+,1)@KKRvD2024"], *this),
         _m_pi(p["mass::pi^+"], *this),
         _t_0(p["pi->pi::t_0@KKRvD2024"], *this)
     {
@@ -225,9 +225,9 @@ namespace eos
         const auto series      = this->series_m(z, b);
 
         // Super-threshold pole location
-        const auto zr =  this->_zr(this->_Mr(), this->_Gr());
+        const auto zr =  this->_zr(this->_M_fp_I1(), this->_G_fp_I1());
         // Artificial FF zero interpolation value
-        const auto cr = complex<double>(this->_re_cr(), this->_im_cr());
+        const auto cr = complex<double>(this->_re_c_fp_I1(), this->_im_c_fp_I1());
 
         // Inverse Blaschke factors
         const auto B1 = this->_inverseblaschke(z, zr);

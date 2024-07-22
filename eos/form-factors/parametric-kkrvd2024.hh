@@ -40,10 +40,10 @@ namespace eos
         private:
             // parameters for form factor f_+ (I=1 projection)
             std::array<UsedParameter, 10u> _b_fp_I1;
-            UsedParameter _re_cr;
-            UsedParameter _im_cr;
-            UsedParameter _Mr;
-            UsedParameter _Gr;
+            UsedParameter _re_c_fp_I1;
+            UsedParameter _im_c_fp_I1;
+            UsedParameter _M_fp_I1;
+            UsedParameter _G_fp_I1;
 
             // hadron masses
             UsedParameter _m_pi;
@@ -108,10 +108,10 @@ namespace eos
         private:
             // parameters for form factor f_+ (I=1 projection)
             std::array<UsedParameter, 10u> _b_fp_I1;
-            UsedParameter _re_cr;
-            UsedParameter _im_cr;
-            UsedParameter _Mr;
-            UsedParameter _Gr;
+            UsedParameter _re_c_fp_I1;
+            UsedParameter _im_c_fp_I1;
+            UsedParameter _M_fp_I1;
+            UsedParameter _G_fp_I1;
 
             // hadron masses
             UsedParameter _m_pi;
