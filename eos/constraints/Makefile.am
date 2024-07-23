@@ -27,11 +27,13 @@ CONSTRAINTS_FILES = \
 	Dq-to-dilepton.yaml \
 	dispersive-bounds.yaml \
 	ee-to-ccbar.yaml \
+	ee-to-pipi.yaml \
 	Lb-to-L-ll.yaml \
 	Lb-to-Lq-form-factors.yaml \
 	Lc-to-L-form-factors.yaml \
 	Lc-to-L-l-nu.yaml \
 	miscellaneous.yaml \
+	tau-to-pi-pi-nu.yaml \
 	wet-constraints.yaml
 
 EXTRA_DIST = $(CONSTRAINTS_FILES)
