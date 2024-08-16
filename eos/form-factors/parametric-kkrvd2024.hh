@@ -39,7 +39,7 @@ namespace eos
     {
         private:
             // parameters for form factor f_+ (I=1 projection)
-            std::array<UsedParameter, 10u> _b_fp_I1;
+            std::array<UsedParameter, 9u> _b_fp_I1;
             UsedParameter _re_c_fp_I1;
             UsedParameter _im_c_fp_I1;
             UsedParameter _M_fp_I1;
@@ -107,7 +107,7 @@ namespace eos
     {
         private:
             // parameters for form factor f_+ (I=1 projection)
-            std::array<UsedParameter, 10u> _b_fp_I1;
+            std::array<UsedParameter, 9u> _b_fp_I1;
             UsedParameter _re_c_fp_I1;
             UsedParameter _im_c_fp_I1;
             UsedParameter _M_fp_I1;

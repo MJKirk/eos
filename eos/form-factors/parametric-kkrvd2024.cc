@@ -32,7 +32,6 @@ namespace eos
 {
     KKRvD2024FormFactors<PiToPi>::KKRvD2024FormFactors(const Parameters & p, const Options & /*o*/) :
         _b_fp_I1{{
-            UsedParameter(p[_par_name("+", "1", "0")], *this),
             UsedParameter(p[_par_name("+", "1", "1")], *this),
             UsedParameter(p[_par_name("+", "1", "2")], *this),
             UsedParameter(p[_par_name("+", "1", "3")], *this),
@@ -100,21 +99,25 @@ namespace eos
     double
     KKRvD2024FormFactors<PiToPi>::f_p(const double & q2) const
     {
-        // prepare expansion coefficients
-        std::array<double, 10> b;
-        std::copy(_b_fp_I1.cbegin(), _b_fp_I1.cend(), b.begin());
-
         const auto z           = this->z(q2);
         const auto chi         = 3.52e-3; // GeV^-2, cf. [BL:1998A], p. 13
         const auto phi         = this->phi_p(z, chi);
         // the weight function has been absorbed into the outer function to cancel a superficial divergence
         // as z -> +/- 1.0
-        const auto series      = this->series_m(z, b);
 
         // Super-threshold pole location
         const auto zr =  this->_zr(this->_M_fp_I1(), this->_G_fp_I1());
         // Artificial FF zero interpolation value
         const auto cr = complex<double>(this->_re_c_fp_I1(), this->_im_c_fp_I1());
+
+        // prepare expansion coefficients
+        std::array<double, 10> b;
+        std::copy(_b_fp_I1.cbegin(), _b_fp_I1.cend(), b.begin()+1);
+        // Fix b[0] to enforce F(q2=0) = 1
+        const auto phi0 = this->phi_p(0.0, chi);
+        b[0] = power_of<2>(std::abs(zr)) * (phi0 + 2 * real(cr) / std::abs(zr));
+
+        const auto series      = this->series_m(z, b);
 
         // Inverse Blaschke factors
         const auto B1 = this->_inverseblaschke(z, zr);
@@ -147,7 +150,6 @@ namespace eos
     /* Vacuum -> pi pi */
     KKRvD2024FormFactors<VacuumToPiPi>::KKRvD2024FormFactors(const Parameters & p, const Options & /*o*/) :
         _b_fp_I1{{
-            UsedParameter(p[_par_name("+", "1", "0")], *this),
             UsedParameter(p[_par_name("+", "1", "1")], *this),
             UsedParameter(p[_par_name("+", "1", "2")], *this),
             UsedParameter(p[_par_name("+", "1", "3")], *this),
@@ -215,19 +217,23 @@ namespace eos
     complex<double>
     KKRvD2024FormFactors<VacuumToPiPi>::f_p(const double & q2) const
     {
-        // prepare expansion coefficients
-        std::array<double, 10> b;
-        std::copy(_b_fp_I1.cbegin(), _b_fp_I1.cend(), b.begin());
-
         const auto z           = this->z(q2);
         const auto chi         = 3.52e-3; // GeV^-2, cf. [BL:1998A], p. 13
         const auto phi         = this->phi_p(z, chi);
-        const auto series      = this->series_m(z, b);
 
         // Super-threshold pole location
         const auto zr =  this->_zr(this->_M_fp_I1(), this->_G_fp_I1());
         // Artificial FF zero interpolation value
         const auto cr = complex<double>(this->_re_c_fp_I1(), this->_im_c_fp_I1());
+
+        // prepare expansion coefficients
+        std::array<double, 10> b;
+        std::copy(_b_fp_I1.cbegin(), _b_fp_I1.cend(), b.begin()+1);
+        // Fix b[0] to enforce F(q2=0) = 1
+        const auto phi0 = this->phi_p(0.0, chi).real(); // fix this real !!!!
+        b[0] = power_of<2>(std::abs(zr)) * (phi0 + 2 * real(cr) / std::abs(zr));
+
+        const auto series      = this->series_m(z, b);
 
         // Inverse Blaschke factors
         const auto B1 = this->_inverseblaschke(z, zr);

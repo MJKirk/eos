@@ -5753,12 +5753,6 @@ groups:
     parameters:
       # form factor parameters for pi->pi in [KKRvD:2024A] parametrization,
       # with f_+ fitted from data
-      'pi->pi::b_(+,1)^0@KKRvD2024' :
-          central: +0.0
-          min:     -1.0
-          max:     +1.0
-          latex:    '$b^{(+,I=1)}_0$'
-          comments: ''
       'pi->pi::b_(+,1)^1@KKRvD2024' :
           central: +0.0
           min:     -1.0
