@@ -97,6 +97,22 @@ namespace eos
     }
 
     double
+    KKRvD2024FormFactors<PiToPi>::_b0_fp_I1(const double & chi, const complex<double> & zr, const complex<double> & cr) const
+    {
+        const auto z0 = this->z(0.0);
+        const auto phi_z0 = this->phi_p(z0, chi);
+        const auto B1_z0 = this->_inverseblaschke(z0, zr);
+
+        std::array<double, 10> b;
+        b[0] = 0.0;
+        std::copy(_b_fp_I1.cbegin(), _b_fp_I1.cend(), b.begin()+1);
+        const auto rest_of_series_z0 = this->series_m(z0, b);
+
+        const auto b0 = (phi_z0 - 2 * real(cr * B1_z0)) / power_of<2>(std::abs(B1_z0)) - rest_of_series_z0;
+        return b0;
+    }
+
+    double
     KKRvD2024FormFactors<PiToPi>::f_p(const double & q2) const
     {
         const auto z           = this->z(q2);
@@ -114,8 +130,7 @@ namespace eos
         std::array<double, 10> b;
         std::copy(_b_fp_I1.cbegin(), _b_fp_I1.cend(), b.begin()+1);
         // Fix b[0] to enforce F(q2=0) = 1
-        const auto phi0 = this->phi_p(0.0, chi);
-        b[0] = power_of<2>(std::abs(zr)) * (phi0 + 2 * real(cr) / std::abs(zr));
+        b[0] = _b0_fp_I1(chi, zr, cr);
 
         const auto series      = this->series_m(z, b);
 
@@ -214,6 +229,24 @@ namespace eos
         return std::inner_product(c.cbegin(), c.cend(), zvalues.cbegin(), complex<double>(0.0, 0.0));
     }
 
+    double
+    KKRvD2024FormFactors<VacuumToPiPi>::_b0_fp_I1(const double & chi, const complex<double> & zr, const complex<double> & cr) const
+    {
+        const auto z0 = this->z(0.0);
+        const auto phi_z0 = this->phi_p(z0, chi);
+
+        const auto B1_z0 = this->_inverseblaschke(z0, zr);
+        const auto B2_z0 = this->_inverseblaschke(z0, std::conj(zr));
+
+        std::array<double, 10> b;
+        b[0] = 0.0;
+        std::copy(_b_fp_I1.cbegin(), _b_fp_I1.cend(), b.begin()+1);
+        const auto rest_of_series_z0 = this->series_m(z0, b);
+
+        const auto b0 = (phi_z0 - cr * B1_z0 - std::conj(cr) * B2_z0) / (B1_z0 * B2_z0) - rest_of_series_z0;
+        return real(b0); // Fix this real !!!!
+    }
+
     complex<double>
     KKRvD2024FormFactors<VacuumToPiPi>::f_p(const double & q2) const
     {
@@ -230,8 +263,7 @@ namespace eos
         std::array<double, 10> b;
         std::copy(_b_fp_I1.cbegin(), _b_fp_I1.cend(), b.begin()+1);
         // Fix b[0] to enforce F(q2=0) = 1
-        const auto phi0 = this->phi_p(0.0, chi).real(); // fix this real !!!!
-        b[0] = power_of<2>(std::abs(zr)) * (phi0 + 2 * real(cr) / std::abs(zr));
+        b[0] = _b0_fp_I1(chi, zr, cr);
 
         const auto series      = this->series_m(z, b);
 

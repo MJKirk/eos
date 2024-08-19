@@ -83,6 +83,8 @@ namespace eos
                 return (x / abs(x)) * (1.0 - z * std::conj(x)) / (z - x);
             }
 
+            double _b0_fp_I1(const double & chi, const complex<double> & zr, const complex<double> & cr) const;
+
         public:
             KKRvD2024FormFactors(const Parameters & p, const Options & o);
             ~KKRvD2024FormFactors();
@@ -151,6 +153,8 @@ namespace eos
             {
                 return (x / abs(x)) * (1.0 - z * std::conj(x)) / (z - x);
             }
+
+            double _b0_fp_I1(const double & chi, const complex<double> & zr, const complex<double> & cr) const;
 
         public:
             KKRvD2024FormFactors(const Parameters & p, const Options & o);

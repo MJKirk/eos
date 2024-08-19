@@ -43,7 +43,6 @@ class ParametricKKRvD2024Test :
             Parameters p = Parameters::Defaults();
             p["mass::pi^+"]                  = 0.13957;
             p["pi->pi::t_0@KKRvD2024"]       = 0.0;
-            // p["pi->pi::b_(+,1)^0@KKRvD2024"] = -0.4523;
             p["pi->pi::b_(+,1)^1@KKRvD2024"] = 0.01101;
             p["pi->pi::b_(+,1)^2@KKRvD2024"] = 0.01342;
             p["pi->pi::b_(+,1)^3@KKRvD2024"] = 0.01119;
