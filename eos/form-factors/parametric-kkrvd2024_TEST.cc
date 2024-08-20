@@ -40,79 +40,162 @@ class ParametricKKRvD2024Test :
         {
             static const double eps = 1e-7;
 
-            Parameters p = Parameters::Defaults();
-            p["mass::pi^+"]                  = 0.13957;
-            p["pi->pi::t_0@KKRvD2024"]       = 0.0;
-            p["pi->pi::b_(+,1)^1@KKRvD2024"] = 0.01101;
-            p["pi->pi::b_(+,1)^2@KKRvD2024"] = 0.01342;
-            p["pi->pi::b_(+,1)^3@KKRvD2024"] = 0.01119;
-            p["pi->pi::b_(+,1)^4@KKRvD2024"] = 0.02332;
-            p["pi->pi::b_(+,1)^5@KKRvD2024"] = 0.004137;
-            p["pi->pi::b_(+,1)^6@KKRvD2024"] = 0.01153;
-            p["pi->pi::b_(+,1)^7@KKRvD2024"] = 0.001415;
-            p["pi->pi::b_(+,1)^8@KKRvD2024"] = 0.009508;
-            p["pi->pi::b_(+,1)^9@KKRvD2024"] = 0.0009328;
-            p["pi->pi::M_(+,1)@KKRvD2024"] = 0.7616;
-            p["pi->pi::Gamma_(+,1)@KKRvD2024"] = 0.1480;
-            p["pi->pi::Re{c}_(+,1)@KKRvD2024"] = 0.08049;
-            p["pi->pi::Im{c}_(+,1)@KKRvD2024"] = -0.2830;
-
-            /* P->P factory */
+            // t0 = 0
             {
-                std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("pi->pi::KKRvD2024", p, Options{ });
 
-                TEST_CHECK(nullptr != ff);
+                Parameters p = Parameters::Defaults();
+                p["mass::pi^+"]                  = 0.13957;
+                p["pi->pi::t_0@KKRvD2024"]       = 0.0;
+                p["pi->pi::b_(+,1)^1@KKRvD2024"] = 0.01101;
+                p["pi->pi::b_(+,1)^2@KKRvD2024"] = 0.01342;
+                p["pi->pi::b_(+,1)^3@KKRvD2024"] = 0.01119;
+                p["pi->pi::b_(+,1)^4@KKRvD2024"] = 0.02332;
+                p["pi->pi::b_(+,1)^5@KKRvD2024"] = 0.004137;
+                p["pi->pi::b_(+,1)^6@KKRvD2024"] = 0.01153;
+                p["pi->pi::b_(+,1)^7@KKRvD2024"] = 0.001415;
+                p["pi->pi::b_(+,1)^8@KKRvD2024"] = 0.009508;
+                p["pi->pi::b_(+,1)^9@KKRvD2024"] = 0.0009328;
+                p["pi->pi::M_(+,1)@KKRvD2024"] = 0.7616;
+                p["pi->pi::Gamma_(+,1)@KKRvD2024"] = 0.1480;
+                p["pi->pi::Re{c}_(+,1)@KKRvD2024"] = 0.08049;
+                p["pi->pi::Im{c}_(+,1)@KKRvD2024"] = -0.2830;
+
+                /* P->P factory */
+                {
+                    std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("pi->pi::KKRvD2024", p, Options{ });
+
+                    TEST_CHECK(nullptr != ff);
+                }
+
+                /* f_+ and its auxiliary functions at spacelike and lightlike q2 <= 0.0 */
+                {
+                    KKRvD2024FormFactors<PiToPi> ff(p, Options{ });
+
+                    const double chi = 3.52e-3;
+
+                    TEST_CHECK_NEARLY_EQUAL(ff.z(-1.0), 0.5762159, eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff.z( 0.0), 0.0,      eps);
+
+                    TEST_CHECK_NEARLY_EQUAL(ff.phi_p(ff.z(-1.0), chi), 1.303305e-1, eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff.phi_p(ff.z( 0.0), chi), 2.969088e-2, eps);
+
+                    TEST_CHECK_NEARLY_EQUAL(ff.f_p(-1.0), 0.77095895,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff.f_p( 0.0), 1.0, eps);
+                }
+
+                /* 0->PP factory */
+                {
+                    std::shared_ptr<FormFactors<VacuumToPP>> ff = FormFactorFactory<VacuumToPP>::create("0->pipi::KKRvD2024", p, Options{ });
+
+                    TEST_CHECK(nullptr != ff);
+                }
+
+                /* f_+ at timelike q2 > 0.0 */
+                {
+                    KKRvD2024FormFactors<VacuumToPiPi> ff(p, Options{ });
+
+                    const double chi = 3.52e-3;
+
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.z( 0.0)),  0.0,      eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.z( 0.0)),  0.0,      eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.z(+0.1)), -0.5583828, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.z(+0.1)),  0.8295834, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.z(+0.5)),  0.6883234, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.z(+0.5)),  0.7254039, eps);
+
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.phi_p(ff.z( 0.0), chi)),  0.02969088,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phi_p(ff.z( 0.0), chi)),  0.0,        eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.phi_p(ff.z(+0.1), chi)),  0.00361219, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phi_p(ff.z(+0.1), chi)),  0.00827876, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.phi_p(ff.z(+0.5), chi)), -0.04728994,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phi_p(ff.z(+0.5), chi)),  0.06171049,  eps);
+
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.f_p( 0.0)),  1.0, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.f_p( 0.0)),  0.0,         eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.f_p(+0.1)),  0.48037094,   eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.f_p(+0.1)), -1.92660137,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.f_p(+0.5)),  4.80894779,   eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.f_p(+0.5)),  2.02035446,   eps);
+                }
             }
 
-            /* f_+ and its auxiliary functions at spacelike and lightlike q2 <= 0.0 */
+            // t0 = -2
             {
-                KKRvD2024FormFactors<PiToPi> ff(p, Options{ });
 
-                const double chi = 3.52e-3;
+                Parameters p = Parameters::Defaults();
+                p["mass::pi^+"]                  = 0.13957;
+                p["pi->pi::t_0@KKRvD2024"]       = -2.0;
+                p["pi->pi::b_(+,1)^1@KKRvD2024"] = 8.436;
+                p["pi->pi::b_(+,1)^2@KKRvD2024"] = 2.879;
+                p["pi->pi::b_(+,1)^3@KKRvD2024"] = -7.237;
+                p["pi->pi::b_(+,1)^4@KKRvD2024"] = -11.17;
+                p["pi->pi::b_(+,1)^5@KKRvD2024"] = -5.419;
+                p["pi->pi::b_(+,1)^6@KKRvD2024"] = 4.126;
+                p["pi->pi::b_(+,1)^7@KKRvD2024"] = 8.940;
+                p["pi->pi::b_(+,1)^8@KKRvD2024"] = 7.771;
+                p["pi->pi::b_(+,1)^9@KKRvD2024"] = 3.230;
+                p["pi->pi::M_(+,1)@KKRvD2024"] = 0.6914;
+                p["pi->pi::Gamma_(+,1)@KKRvD2024"] = 0.3407;
+                p["pi->pi::Re{c}_(+,1)@KKRvD2024"] = 7.570;
+                p["pi->pi::Im{c}_(+,1)@KKRvD2024"] = 19.31;
 
-                TEST_CHECK_NEARLY_EQUAL(ff.z(-1.0), 0.5762159, eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.z( 0.0), 0.0,      eps);
+                /* P->P factory */
+                {
+                    std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("pi->pi::KKRvD2024", p, Options{ });
 
-                TEST_CHECK_NEARLY_EQUAL(ff.phi_p(ff.z(-1.0), chi), 1.303305e-1, eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.phi_p(ff.z( 0.0), chi), 2.969088e-2, eps);
+                    TEST_CHECK(nullptr != ff);
+                }
 
-                TEST_CHECK_NEARLY_EQUAL(ff.f_p(-1.0), 0.77095895,  eps);
-                TEST_CHECK_NEARLY_EQUAL(ff.f_p( 0.0), 1.0, eps);
-            }
+                /* f_+ and its auxiliary functions at spacelike and lightlike q2 <= 0.0 */
+                {
+                    KKRvD2024FormFactors<PiToPi> ff(p, Options{ });
 
-            /* 0->PP factory */
-            {
-                std::shared_ptr<FormFactors<VacuumToPP>> ff = FormFactorFactory<VacuumToPP>::create("0->pipi::KKRvD2024", p, Options{ });
+                    const double chi = 3.52e-3;
 
-                TEST_CHECK(nullptr != ff);
-            }
+                    TEST_CHECK_NEARLY_EQUAL(ff.z(-1.0), -0.162626752, eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff.z( 0.0), -0.675539131, eps);
 
-            /* f_+ at timelike q2 > 0.0 */
-            {
-                KKRvD2024FormFactors<VacuumToPiPi> ff(p, Options{ });
+                    TEST_CHECK_NEARLY_EQUAL(ff.phi_p(ff.z(-1.0), chi), 0.230936251, eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff.phi_p(ff.z( 0.0), chi), 0.295503507, eps);
 
-                const double chi = 3.52e-3;
+                    TEST_CHECK_NEARLY_EQUAL(ff.f_p(-1.0), -36.5725349,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff.f_p( 0.0), 1.0, eps);
+                }
 
-                TEST_CHECK_NEARLY_EQUAL(real(ff.z( 0.0)),  0.0,      eps);
-                TEST_CHECK_NEARLY_EQUAL(imag(ff.z( 0.0)),  0.0,      eps);
-                TEST_CHECK_NEARLY_EQUAL(real(ff.z(+0.1)), -0.5583828, eps);
-                TEST_CHECK_NEARLY_EQUAL(imag(ff.z(+0.1)),  0.8295834, eps);
-                TEST_CHECK_NEARLY_EQUAL(real(ff.z(+0.5)),  0.6883234, eps);
-                TEST_CHECK_NEARLY_EQUAL(imag(ff.z(+0.5)),  0.7254039, eps);
+                /* 0->PP factory */
+                {
+                    std::shared_ptr<FormFactors<VacuumToPP>> ff = FormFactorFactory<VacuumToPP>::create("0->pipi::KKRvD2024", p, Options{ });
 
-                TEST_CHECK_NEARLY_EQUAL(real(ff.phi_p(ff.z( 0.0), chi)),  0.02969088,  eps);
-                TEST_CHECK_NEARLY_EQUAL(imag(ff.phi_p(ff.z( 0.0), chi)),  0.0,        eps);
-                TEST_CHECK_NEARLY_EQUAL(real(ff.phi_p(ff.z(+0.1), chi)),  0.00361219, eps);
-                TEST_CHECK_NEARLY_EQUAL(imag(ff.phi_p(ff.z(+0.1), chi)),  0.00827876, eps);
-                TEST_CHECK_NEARLY_EQUAL(real(ff.phi_p(ff.z(+0.5), chi)), -0.04728994,  eps);
-                TEST_CHECK_NEARLY_EQUAL(imag(ff.phi_p(ff.z(+0.5), chi)),  0.06171049,  eps);
+                    TEST_CHECK(nullptr != ff);
+                }
 
-                TEST_CHECK_NEARLY_EQUAL(real(ff.f_p( 0.0)),  1.0, eps);
-                TEST_CHECK_NEARLY_EQUAL(imag(ff.f_p( 0.0)),  0.0,         eps);
-                TEST_CHECK_NEARLY_EQUAL(real(ff.f_p(+0.1)),  0.48037094,   eps);
-                TEST_CHECK_NEARLY_EQUAL(imag(ff.f_p(+0.1)), -1.92660137,  eps);
-                TEST_CHECK_NEARLY_EQUAL(real(ff.f_p(+0.5)),  4.80894779,   eps);
-                TEST_CHECK_NEARLY_EQUAL(imag(ff.f_p(+0.5)),  2.02035446,   eps);
+                /* f_+ at timelike q2 > 0.0 */
+                {
+                    KKRvD2024FormFactors<VacuumToPiPi> ff(p, Options{ });
+
+                    const double chi = 3.52e-3;
+
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.z( 0.0)),  -0.6755391, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.z( 0.0)),  0.0,      eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.z(+0.1)), -0.97897061, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.z(+0.1)),  0.20400134, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.z(+0.5)), -0.66233531, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.z(+0.5)),  0.74920754, eps);
+
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.phi_p(ff.z( 0.0), chi)),  0.295503507,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phi_p(ff.z( 0.0), chi)),  0.0,        eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.phi_p(ff.z(+0.1), chi)),  0.353622511, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phi_p(ff.z(+0.1), chi)), -0.069193604, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.phi_p(ff.z(+0.5), chi)),  0.234597695,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phi_p(ff.z(+0.5), chi)), -0.0912014926,  eps);
+
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.f_p( 0.0)),  1.0, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.f_p( 0.0)),  0.0, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.f_p(+0.1)),  12.6164521,   eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.f_p(+0.1)),  1.70710544,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.f_p(+0.5)),  74.9458549,   eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.f_p(+0.5)),  -147.9483887,   eps);
+                }
             }
         }
 } parametric_KKRvD2024_test;
