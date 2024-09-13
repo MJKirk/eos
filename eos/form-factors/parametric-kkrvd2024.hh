@@ -70,7 +70,8 @@ namespace eos
             inline complex<double> _z(const complex<double> & q2, const double & t_0) const
             {
                 const auto t_p = _t_p();
-                return (sqrt(t_p - q2) - sqrt(t_p - t_0)) / (sqrt(t_p - q2) + sqrt(t_p - t_0));
+                const auto my_q2 = q2 * complex<double>(1.0, 1e-6); // Positive zero imaginary part gives branch cut to match Meril
+                return (sqrt(t_p - my_q2) - sqrt(t_p - t_0)) / (sqrt(t_p - my_q2) + sqrt(t_p - t_0));
             }
 
             inline complex<double> _zr(const double & M, const double & Gamma) const
@@ -134,14 +135,15 @@ namespace eos
             inline complex<double> _z(const double & q2, const double & t_0) const
             {
                 const complex<double> t_p = complex<double>{ _t_p(), 0.0};
-
-                return (sqrt(t_p - q2) - sqrt(t_p - t_0)) / (sqrt(t_p - q2) + sqrt(t_p - t_0));
+                const auto my_q2 = q2 * complex<double>(1.0, 1e-6); // Positive zero imaginary part gives branch cut to match Meril
+                return (sqrt(t_p - my_q2) - sqrt(t_p - t_0)) / (sqrt(t_p - my_q2) + sqrt(t_p - t_0));
             }
 
             inline complex<double> _z(const complex<double> & q2, const double & t_0) const
             {
                 const auto t_p = _t_p();
-                return (sqrt(t_p - q2) - sqrt(t_p - t_0)) / (sqrt(t_p - q2) + sqrt(t_p - t_0));
+                const auto my_q2 = q2 * complex<double>(1.0, 1e-6); // Positive zero imaginary part gives branch cut to match Meril
+                return (sqrt(t_p - my_q2) - sqrt(t_p - t_0)) / (sqrt(t_p - my_q2) + sqrt(t_p - t_0));
             }
 
             inline complex<double> _zr(const double & M, const double & Gamma) const
