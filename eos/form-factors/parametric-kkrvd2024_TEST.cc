@@ -38,7 +38,7 @@ class ParametricKKRvD2024Test :
 
         virtual void run() const
         {
-            static const double eps = 1e-5;
+            static const double eps = 1e-7;
 
             // t0 = 0
             {
@@ -46,19 +46,19 @@ class ParametricKKRvD2024Test :
                 Parameters p = Parameters::Defaults();
                 p["mass::pi^+"]                  = 0.13957;
                 p["pi->pi::t_0@KKRvD2024"]       = 0.0;
-                p["pi->pi::b_(+,1)^1@KKRvD2024"] = -0.01170;
-                p["pi->pi::b_(+,1)^2@KKRvD2024"] = -0.02444;
-                p["pi->pi::b_(+,1)^3@KKRvD2024"] = -0.02366;
+                p["pi->pi::b_(+,1)^1@KKRvD2024"] = -0.027048;
+                p["pi->pi::b_(+,1)^2@KKRvD2024"] = -0.010680;
+                p["pi->pi::b_(+,1)^3@KKRvD2024"] = -0.0070125;
                 p["pi->pi::b_(+,1)^4@KKRvD2024"] = 0.0;
                 p["pi->pi::b_(+,1)^5@KKRvD2024"] = 0.0;
                 p["pi->pi::b_(+,1)^6@KKRvD2024"] = 0.0;
                 p["pi->pi::b_(+,1)^7@KKRvD2024"] = 0.0;
                 p["pi->pi::b_(+,1)^8@KKRvD2024"] = 0.0;
                 p["pi->pi::b_(+,1)^9@KKRvD2024"] = 0.0;
-                p["pi->pi::M_(+,1)@KKRvD2024"] = 0.7605;
-                p["pi->pi::Gamma_(+,1)@KKRvD2024"] = 0.1563;
-                p["pi->pi::Re{c}_(+,1)@KKRvD2024"] = 0.04342;
-                p["pi->pi::Im{c}_(+,1)@KKRvD2024"] = -0.2576;
+                p["pi->pi::M_(+,1)@KKRvD2024"] = 0.76173;
+                p["pi->pi::Gamma_(+,1)@KKRvD2024"] = 0.14620;
+                p["pi->pi::Re{c}_(+,1)@KKRvD2024"] = -0.21691;
+                p["pi->pi::Im{c}_(+,1)@KKRvD2024"] = 0.0030072;
 
                 /* P->P factory */
                 {
@@ -71,15 +71,15 @@ class ParametricKKRvD2024Test :
                 {
                     KKRvD2024FormFactors<PiToPi> ff(p, Options{ });
 
-                    const double chi = 3.52e-3;
+                    const double chi = 0.0258815;
 
                     TEST_CHECK_NEARLY_EQUAL(ff.z(-1.0), 0.5762159, eps);
                     TEST_CHECK_NEARLY_EQUAL(ff.z( 0.0), 0.0,      eps);
 
-                    TEST_CHECK_NEARLY_EQUAL(ff.phi_p(ff.z(-1.0), chi), 1.303305e-1, eps);
-                    TEST_CHECK_NEARLY_EQUAL(ff.phi_p(ff.z( 0.0), chi), 2.969088e-2, eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff.phi_p(ff.z(-1.0), chi), 0.0818588362, eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff.phi_p(ff.z( 0.0), chi), 0.0243975773, eps);
 
-                    TEST_CHECK_NEARLY_EQUAL(ff.f_p(-1.0), 0.539014803,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff.f_p(-1.0), 0.168686490,  eps);
                     TEST_CHECK_NEARLY_EQUAL(ff.f_p( 0.0), 1.0, eps);
                 }
 
@@ -94,7 +94,7 @@ class ParametricKKRvD2024Test :
                 {
                     KKRvD2024FormFactors<VacuumToPiPi> ff(p, Options{ });
 
-                    const double chi = 3.52e-3;
+                    const double chi = 0.0258815;
 
                     TEST_CHECK_NEARLY_EQUAL(real(ff.z( 0.0)),  0.0,      eps);
                     TEST_CHECK_NEARLY_EQUAL(imag(ff.z( 0.0)),  0.0,      eps);
@@ -103,19 +103,19 @@ class ParametricKKRvD2024Test :
                     TEST_CHECK_NEARLY_EQUAL(real(ff.z(+0.5)),  0.6883234, eps);
                     TEST_CHECK_NEARLY_EQUAL(imag(ff.z(+0.5)), -0.7254039, eps);
 
-                    TEST_CHECK_NEARLY_EQUAL(real(ff.phi_p(ff.z( 0.0), chi)),  0.02969088,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.phi_p(ff.z( 0.0), chi)),  0.0243975773,  eps);
                     TEST_CHECK_NEARLY_EQUAL(imag(ff.phi_p(ff.z( 0.0), chi)),  0.0,        eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(ff.phi_p(ff.z(+0.1), chi)),  0.00361219, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phi_p(ff.z(+0.1), chi)), -0.00827876, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(ff.phi_p(ff.z(+0.5), chi)), -0.04728994,  eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phi_p(ff.z(+0.5), chi)), -0.06171049,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.phi_p(ff.z(+0.1), chi)),  0.0044399384, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phi_p(ff.z(+0.1), chi)), -0.0075823849, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.phi_p(ff.z(+0.5), chi)), -0.0150675279,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phi_p(ff.z(+0.5), chi)), -0.0598239508,  eps);
 
                     TEST_CHECK_NEARLY_EQUAL(real(ff.f_p( 0.0)),  1.0, eps);
                     TEST_CHECK_NEARLY_EQUAL(imag(ff.f_p( 0.0)),  0.0,         eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(ff.f_p(+0.1)),  0.71768559,   eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(ff.f_p(+0.1)),  1.32440618,  eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(ff.f_p(+0.5)),  4.94507423,   eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(ff.f_p(+0.5)), -1.87692989,   eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.f_p(+0.1)),  1.000788609,   eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.f_p(+0.1)),  0.328870780,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.f_p(+0.5)),  2.45351138,   eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.f_p(+0.5)),  4.58789522,   eps);
                 }
             }
 
@@ -125,19 +125,19 @@ class ParametricKKRvD2024Test :
                 Parameters p = Parameters::Defaults();
                 p["mass::pi^+"]                  = 0.13957;
                 p["pi->pi::t_0@KKRvD2024"]       = -2.0;
-                p["pi->pi::b_(+,1)^1@KKRvD2024"] = -0.4610;
-                p["pi->pi::b_(+,1)^2@KKRvD2024"] = -0.2992;
-                p["pi->pi::b_(+,1)^3@KKRvD2024"] = -0.1342;
+                p["pi->pi::b_(+,1)^1@KKRvD2024"] = -0.35095;
+                p["pi->pi::b_(+,1)^2@KKRvD2024"] = -0.29473;
+                p["pi->pi::b_(+,1)^3@KKRvD2024"] = -0.17205;
                 p["pi->pi::b_(+,1)^4@KKRvD2024"] = 0.0;
                 p["pi->pi::b_(+,1)^5@KKRvD2024"] = 0.0;
                 p["pi->pi::b_(+,1)^6@KKRvD2024"] = 0.0;
                 p["pi->pi::b_(+,1)^7@KKRvD2024"] = 0.0;
                 p["pi->pi::b_(+,1)^8@KKRvD2024"] = 0.0;
                 p["pi->pi::b_(+,1)^9@KKRvD2024"] = 0.0;
-                p["pi->pi::M_(+,1)@KKRvD2024"] = 0.7605;
-                p["pi->pi::Gamma_(+,1)@KKRvD2024"] = 0.1466;
-                p["pi->pi::Re{c}_(+,1)@KKRvD2024"] = -0.08997;
-                p["pi->pi::Im{c}_(+,1)@KKRvD2024"] = 0.8420;
+                p["pi->pi::M_(+,1)@KKRvD2024"] = 0.76032;
+                p["pi->pi::Gamma_(+,1)@KKRvD2024"] = 0.14638;
+                p["pi->pi::Re{c}_(+,1)@KKRvD2024"] = 0.32927;
+                p["pi->pi::Im{c}_(+,1)@KKRvD2024"] = 0.43654;
 
                 /* P->P factory */
                 {
@@ -150,15 +150,15 @@ class ParametricKKRvD2024Test :
                 {
                     KKRvD2024FormFactors<PiToPi> ff(p, Options{ });
 
-                    const double chi = 3.52e-3;
+                    const double chi = 0.0258815;
 
                     TEST_CHECK_NEARLY_EQUAL(ff.z(-1.0), -0.162626752, eps);
                     TEST_CHECK_NEARLY_EQUAL(ff.z( 0.0), -0.675539131, eps);
 
-                    TEST_CHECK_NEARLY_EQUAL(ff.phi_p(ff.z(-1.0), chi), 0.230936251, eps);
-                    TEST_CHECK_NEARLY_EQUAL(ff.phi_p(ff.z( 0.0), chi), 0.295503507, eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff.phi_p(ff.z(-1.0), chi), 0.145047910, eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff.phi_p(ff.z( 0.0), chi), 0.242821037, eps);
 
-                    TEST_CHECK_NEARLY_EQUAL(ff.f_p(-1.0), -0.0546480178,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff.f_p(-1.0), 0.200915869,  eps);
                     TEST_CHECK_NEARLY_EQUAL(ff.f_p( 0.0), 1.0, eps);
                 }
 
@@ -173,7 +173,7 @@ class ParametricKKRvD2024Test :
                 {
                     KKRvD2024FormFactors<VacuumToPiPi> ff(p, Options{ });
 
-                    const double chi = 3.52e-3;
+                    const double chi = 0.0258815;
 
                     TEST_CHECK_NEARLY_EQUAL(real(ff.z( 0.0)),  -0.6755391, eps);
                     TEST_CHECK_NEARLY_EQUAL(imag(ff.z( 0.0)),  0.0,      eps);
@@ -182,19 +182,19 @@ class ParametricKKRvD2024Test :
                     TEST_CHECK_NEARLY_EQUAL(real(ff.z(+0.5)), -0.66233531, eps);
                     TEST_CHECK_NEARLY_EQUAL(imag(ff.z(+0.5)), -0.74920754, eps);
 
-                    TEST_CHECK_NEARLY_EQUAL(real(ff.phi_p(ff.z( 0.0), chi)),  0.295503507,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.phi_p(ff.z( 0.0), chi)),  0.242821037,  eps);
                     TEST_CHECK_NEARLY_EQUAL(imag(ff.phi_p(ff.z( 0.0), chi)),  0.0,        eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(ff.phi_p(ff.z(+0.1), chi)),  0.353622511, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phi_p(ff.z(+0.1), chi)),  0.069193604, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(ff.phi_p(ff.z(+0.5), chi)),  0.234597695,  eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phi_p(ff.z(+0.5), chi)),  0.0912014926,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.phi_p(ff.z(+0.1), chi)),  0.333648456, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phi_p(ff.z(+0.1), chi)),  0.107444433, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.phi_p(ff.z(+0.5), chi)),  0.142282074,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.phi_p(ff.z(+0.5), chi)),  0.140166151,  eps);
 
                     TEST_CHECK_NEARLY_EQUAL(real(ff.f_p( 0.0)),  1.0, eps);
                     TEST_CHECK_NEARLY_EQUAL(imag(ff.f_p( 0.0)),  0.0, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(ff.f_p(+0.1)),  1.233598053,   eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(ff.f_p(+0.1)),  -0.040622832,  eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(ff.f_p(+0.5)),  4.55950717,   eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(ff.f_p(+0.5)),  2.52187579,   eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.f_p(+0.1)),  1.216681140,   eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.f_p(+0.1)),  -0.042359497,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.f_p(+0.5)),  3.63653056,   eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.f_p(+0.5)),  3.73112339,   eps);
                 }
             }
         }
