@@ -71,7 +71,7 @@ namespace eos
         const double t_p     = this->_t_p();
         const double t_0     = this->_t_0();
         const double tfactor = 1.0 - t_0 / t_p;
-        const double Q2      = 2.0;
+        const double Q2      = 1.0;
 
         // cf. [BL:1998A], eq. (4.6), p. 9.
         // note that the weight function factor ``(1.0 + z)^2 * (1.0 - z)^(+1/2)`` has been cancelled against the factor
@@ -116,7 +116,7 @@ namespace eos
     KKRvD2024FormFactors<PiToPi>::f_p(const double & q2) const
     {
         const auto z           = this->z(q2);
-        const auto chi         = 3.52e-3; // GeV^-2, cf. [BL:1998A], p. 13
+        const auto chi         = 0.0258815; // GeV^-2, from Meril at Q^2 = 1 GeV^2
         const auto phi         = this->phi_p(z, chi);
         // the weight function has been absorbed into the outer function to cancel a superficial divergence
         // as z -> +/- 1.0
@@ -204,7 +204,7 @@ namespace eos
         const double t_p     = this->_t_p();
         const double t_0     = this->_t_0();
         const double tfactor = 1.0 - t_0 / t_p;
-        const double Q2      = 2.0;
+        const double Q2      = 1.0;
 
         // cf. [BL:1998A], eq. (4.6), p. 9.
         // note that the asymptotic factor ``(1.0 + z)^2 * (1.0 - z)^(+1/2)`` has been cancelled against the factor
@@ -251,7 +251,7 @@ namespace eos
     KKRvD2024FormFactors<VacuumToPiPi>::f_p(const double & q2) const
     {
         const auto z           = this->z(q2);
-        const auto chi         = 3.52e-3; // GeV^-2, cf. [BL:1998A], p. 13
+        const auto chi         = 0.0258815; // GeV^-2, from Meril at Q^2 = 1 GeV^2
         const auto phi         = this->phi_p(z, chi);
 
         // Super-threshold pole location
