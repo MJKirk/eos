@@ -40,8 +40,6 @@ namespace eos
         private:
             // parameters for form factor f_+ (I=1 projection)
             std::array<UsedParameter, 9u> _b_fp_I1;
-            UsedParameter _re_c_fp_I1;
-            UsedParameter _im_c_fp_I1;
             UsedParameter _M_fp_I1;
             UsedParameter _G_fp_I1;
 
@@ -64,14 +62,14 @@ namespace eos
             inline double _z(const double & q2, const double & t_0) const
             {
                 const auto t_p = _t_p();
+                //const auto my_q2 = q2 * complex<double>(1.0, 1e-12); // Positive zero imaginary part gives branch cut to match Meril
                 return (sqrt(t_p - q2) - sqrt(t_p - t_0)) / (sqrt(t_p - q2) + sqrt(t_p - t_0));
             }
 
             inline complex<double> _z(const complex<double> & q2, const double & t_0) const
             {
                 const auto t_p = _t_p();
-                const auto my_q2 = q2 * complex<double>(1.0, 1e-12); // Positive zero imaginary part gives branch cut to match Meril
-                return (sqrt(t_p - my_q2) - sqrt(t_p - t_0)) / (sqrt(t_p - my_q2) + sqrt(t_p - t_0));
+                return (sqrt(t_p - q2) - sqrt(t_p - t_0)) / (sqrt(t_p - q2) + sqrt(t_p - t_0));
             }
 
             inline complex<double> _zr(const double & M, const double & Gamma) const
@@ -79,12 +77,7 @@ namespace eos
                 return 1.0 / _z(power_of<2>(complex<double>(M, -Gamma/2)), _t_0());
             }
 
-            inline complex<double> _inverseblaschke(const complex<double> & z, const complex<double> & x) const
-            {
-                return (x / abs(x)) * (1.0 - z * std::conj(x)) / (z - x);
-            }
-
-            double _b0_fp_I1(const double & chi, const complex<double> & zr, const complex<double> & cr) const;
+            double _b0_fp_I1(const double & chi, const complex<double> & zr) const;
 
         public:
             KKRvD2024FormFactors(const Parameters & p, const Options & o);
@@ -111,8 +104,6 @@ namespace eos
         private:
             // parameters for form factor f_+ (I=1 projection)
             std::array<UsedParameter, 9u> _b_fp_I1;
-            UsedParameter _re_c_fp_I1;
-            UsedParameter _im_c_fp_I1;
             UsedParameter _M_fp_I1;
             UsedParameter _G_fp_I1;
 
@@ -132,12 +123,12 @@ namespace eos
                 return 4.0 * _m_pi() * _m_pi();
             }
 
-            inline complex<double> _z(const double & q2, const double & t_0) const
-            {
-                const complex<double> t_p = complex<double>{ _t_p(), 0.0};
-                const auto my_q2 = q2 * complex<double>(1.0, 1e-12); // Positive zero imaginary part gives branch cut to match Meril
-                return (sqrt(t_p - my_q2) - sqrt(t_p - t_0)) / (sqrt(t_p - my_q2) + sqrt(t_p - t_0));
-            }
+            //inline complex<double> _z(const double & q2, const double & t_0) const
+            //{
+            //    const complex<double> t_p = complex<double>{ _t_p(), 0.0};
+            //    const auto my_q2 = q2 * complex<double>(1.0, 1e-12); // Positive zero imaginary part gives branch cut to match Meril
+            //    return (sqrt(t_p - my_q2) - sqrt(t_p - t_0)) / (sqrt(t_p - my_q2) + sqrt(t_p - t_0));
+            //}
 
             inline complex<double> _z(const complex<double> & q2, const double & t_0) const
             {
@@ -151,12 +142,7 @@ namespace eos
                 return 1.0 / _z(power_of<2>(complex<double>(M, -Gamma/2)), _t_0());
             }
 
-            inline complex<double> _inverseblaschke(const complex<double> & z, const complex<double> & x) const
-            {
-                return (x / abs(x)) * (1.0 - z * std::conj(x)) / (z - x);
-            }
-
-            double _b0_fp_I1(const double & chi, const complex<double> & zr, const complex<double> & cr) const;
+            double _b0_fp_I1(const double & chi, const complex<double> & zr) const;
 
         public:
             KKRvD2024FormFactors(const Parameters & p, const Options & o);
@@ -165,13 +151,15 @@ namespace eos
             static FormFactors<VacuumToPP> * make(const Parameters & p, const Options & o);
 
             /* auxiliary functions */
-            complex<double> z(const double & q2) const;
+            complex<double> z(const complex<double> & q2) const;
             complex<double> phi_p(const complex<double> & z, const double & chi) const;
             complex<double> series_m(const complex<double> & z, const std::array<double, 10u> & c) const;
 
             virtual complex<double> f_p(const double & q2) const;
             virtual complex<double> f_t(const double & q2) const;
             virtual complex<double> f_0(const double & q2) const;
+
+            virtual complex<double> f_p(const complex<double> & q2) const override;
     };
 
     extern template class KKRvD2024FormFactors<VacuumToPiPi>;

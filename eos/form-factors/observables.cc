@@ -2289,7 +2289,13 @@ namespace eos
                         &FormFactors<VacuumToPP>::abs2_f_p, std::make_tuple("q2")),
 
                 make_form_factor_adapter("0->pipi::Arg{f_+}(q2)", R"(\text{arg}(f_+^{\pi \to \pi}(q^2)))",
-                        &FormFactors<VacuumToPP>::arg_f_p, std::make_tuple("q2"))
+                        &FormFactors<VacuumToPP>::arg_f_p, std::make_tuple("q2")),
+
+                make_form_factor_adapter("0->pipi::Re{f_+}(q2)", R"(\text{arg}(f_+^{\pi \to \pi}(q^2)))",
+                        &FormFactors<VacuumToPP>::re_f_p, std::make_tuple("Re{q2}", "Im{q2}")),
+
+                make_form_factor_adapter("0->pipi::Ime{f_+}(q2)", R"(\text{arg}(f_+^{\pi \to \pi}(q^2)))",
+                        &FormFactors<VacuumToPP>::im_f_p, std::make_tuple("Re{q2}", "Im{q2}"))
             }
         };
 

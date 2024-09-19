@@ -42,8 +42,6 @@ namespace eos
             UsedParameter(p[_par_name("+", "1", "8")], *this),
             UsedParameter(p[_par_name("+", "1", "9")], *this)
         }},
-        _re_c_fp_I1(p["pi->pi::Re{c}_(+,1)@KKRvD2024"], *this),
-        _im_c_fp_I1(p["pi->pi::Im{c}_(+,1)@KKRvD2024"], *this),
         _M_fp_I1(p["pi->pi::M_(+,1)@KKRvD2024"], *this),
         _G_fp_I1(p["pi->pi::Gamma_(+,1)@KKRvD2024"], *this),
         _m_pi(p["mass::pi^+"], *this),
@@ -97,47 +95,42 @@ namespace eos
     }
 
     double
-    KKRvD2024FormFactors<PiToPi>::_b0_fp_I1(const double & chi, const complex<double> & zr, const complex<double> & cr) const
+    KKRvD2024FormFactors<PiToPi>::_b0_fp_I1(const double & chi, const complex<double> & zr) const
     {
-        const auto z0 = this->z(0.0);
-        const auto phi_z0 = this->phi_p(z0, chi);
-        const auto B1_z0 = this->_inverseblaschke(z0, zr);
+        const double z0     = this->z(0.0);
+        const double phi_z0 = this->phi_p(z0, chi);
 
         std::array<double, 10> b;
         b[0] = 0.0;
         std::copy(_b_fp_I1.cbegin(), _b_fp_I1.cend(), b.begin()+1);
         const auto rest_of_series_z0 = this->series_m(z0, b);
 
-        const auto b0 = (phi_z0 - 2 * real(cr * B1_z0)) / power_of<2>(std::abs(B1_z0)) - rest_of_series_z0;
+        const auto b0 = std::norm(z0 - zr) * phi_z0 - rest_of_series_z0;
+
         return b0;
     }
 
     double
     KKRvD2024FormFactors<PiToPi>::f_p(const double & q2) const
     {
-        const auto z           = this->z(q2);
-        const auto chi         = 0.0258815; // GeV^-2, from Meril at Q^2 = 1 GeV^2
-        const auto phi         = this->phi_p(z, chi);
+        const double z   = this->z(q2);
+        const double chi = 0.0258815; // GeV^-2, from Meril at Q^2 = 1 GeV^2
+        const double phi = this->phi_p(z, chi);
         // the weight function has been absorbed into the outer function to cancel a superficial divergence
         // as z -> +/- 1.0
 
         // Super-threshold pole location
         const auto zr =  this->_zr(this->_M_fp_I1(), this->_G_fp_I1());
-        // Artificial FF zero interpolation value
-        const auto cr = complex<double>(this->_re_c_fp_I1(), this->_im_c_fp_I1());
 
         // prepare expansion coefficients
         std::array<double, 10> b;
         std::copy(_b_fp_I1.cbegin(), _b_fp_I1.cend(), b.begin()+1);
         // Fix b[0] to enforce F(q2=0) = 1
-        b[0] = _b0_fp_I1(chi, zr, cr);
+        b[0] = _b0_fp_I1(chi, zr);
 
         const auto series      = this->series_m(z, b);
 
-        // Inverse Blaschke factors
-        const auto B1 = this->_inverseblaschke(z, zr);
-
-        return (series * power_of<2>(std::abs(B1)) + 2 * real(cr * B1)) /  phi; // the weight factor has been absorbed into 1 / phi
+        return (series) / (phi * std::norm(z - zr)); // the weight factor has been absorbed into 1 / phi
     }
 
     double
@@ -175,8 +168,6 @@ namespace eos
             UsedParameter(p[_par_name("+", "1", "8")], *this),
             UsedParameter(p[_par_name("+", "1", "9")], *this)
         }},
-        _re_c_fp_I1(p["pi->pi::Re{c}_(+,1)@KKRvD2024"], *this),
-        _im_c_fp_I1(p["pi->pi::Im{c}_(+,1)@KKRvD2024"], *this),
         _M_fp_I1(p["pi->pi::M_(+,1)@KKRvD2024"], *this),
         _G_fp_I1(p["pi->pi::Gamma_(+,1)@KKRvD2024"], *this),
         _m_pi(p["mass::pi^+"], *this),
@@ -193,7 +184,7 @@ namespace eos
     }
 
     complex<double>
-    KKRvD2024FormFactors<VacuumToPiPi>::z(const double & q2) const
+    KKRvD2024FormFactors<VacuumToPiPi>::z(const complex<double> & q2) const
     {
         return _z(q2, this->_t_0());
     }
@@ -230,25 +221,30 @@ namespace eos
     }
 
     double
-    KKRvD2024FormFactors<VacuumToPiPi>::_b0_fp_I1(const double & chi, const complex<double> & zr, const complex<double> & cr) const
+    KKRvD2024FormFactors<VacuumToPiPi>::_b0_fp_I1(const double & chi, const complex<double> & zr) const
     {
-        const auto z0 = this->z(0.0);
-        const auto phi_z0 = this->phi_p(z0, chi);
-
-        const auto B1_z0 = this->_inverseblaschke(z0, zr);
-        const auto B2_z0 = this->_inverseblaschke(z0, std::conj(zr));
+        const complex<double> z0     = this->z(0.0);
+        const complex<double> phi_z0 = this->phi_p(z0, chi);
 
         std::array<double, 10> b;
         b[0] = 0.0;
         std::copy(_b_fp_I1.cbegin(), _b_fp_I1.cend(), b.begin()+1);
         const auto rest_of_series_z0 = this->series_m(z0, b);
 
-        const auto b0 = (phi_z0 - cr * B1_z0 - std::conj(cr) * B2_z0) / (B1_z0 * B2_z0) - rest_of_series_z0;
-        return real(b0); // Fix this real !!!!
+        const auto b0 = std::norm(z0 - zr) * phi_z0 - rest_of_series_z0;
+
+        return std::real(b0); // all coefficients are real by construction
     }
 
     complex<double>
     KKRvD2024FormFactors<VacuumToPiPi>::f_p(const double & q2) const
+    {
+        static const double eps = 1.0e-12;
+        return f_p(complex<double>(q2, eps));
+    }
+
+    complex<double>
+    KKRvD2024FormFactors<VacuumToPiPi>::f_p(const complex<double> & q2) const
     {
         const auto z           = this->z(q2);
         const auto chi         = 0.0258815; // GeV^-2, from Meril at Q^2 = 1 GeV^2
@@ -256,22 +252,16 @@ namespace eos
 
         // Super-threshold pole location
         const auto zr =  this->_zr(this->_M_fp_I1(), this->_G_fp_I1());
-        // Artificial FF zero interpolation value
-        const auto cr = complex<double>(this->_re_c_fp_I1(), this->_im_c_fp_I1());
 
         // prepare expansion coefficients
         std::array<double, 10> b;
         std::copy(_b_fp_I1.cbegin(), _b_fp_I1.cend(), b.begin()+1);
         // Fix b[0] to enforce F(q2=0) = 1
-        b[0] = _b0_fp_I1(chi, zr, cr);
+        b[0] = _b0_fp_I1(chi, zr);
 
         const auto series      = this->series_m(z, b);
 
-        // Inverse Blaschke factors
-        const auto B1 = this->_inverseblaschke(z, zr);
-        const auto B2 = this->_inverseblaschke(z, std::conj(zr));
-
-        return (series * B1 * B2 + cr * B1 + std::conj(cr) * B2) /  phi; // the weight factor has been absorbed into 1 / phi
+        return series / (z - zr) / (z - std::conj(zr)) /  phi; // the weight factor has been absorbed into 1 / phi
     }
 
     complex<double>

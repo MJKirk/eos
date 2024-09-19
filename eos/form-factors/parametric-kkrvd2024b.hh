@@ -165,13 +165,15 @@ namespace eos
             static FormFactors<VacuumToPP> * make(const Parameters & p, const Options & o);
 
             /* auxiliary functions */
-            complex<double> z(const double & q2) const;
+            complex<double> z(const complex<double> & q2) const;
             complex<double> phi_p(const complex<double> & z, const double & chi) const;
             complex<double> series_m(const complex<double> & z, const std::array<double, 10u> & c) const;
 
             virtual complex<double> f_p(const double & q2) const;
             virtual complex<double> f_t(const double & q2) const;
             virtual complex<double> f_0(const double & q2) const;
+
+            virtual complex<double> f_p(const complex<double> & q2) const;
     };
 
     extern template class KKRvD2024BFormFactors<VacuumToPiPi>;

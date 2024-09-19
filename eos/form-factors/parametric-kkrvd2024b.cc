@@ -193,7 +193,7 @@ namespace eos
     }
 
     complex<double>
-    KKRvD2024BFormFactors<VacuumToPiPi>::z(const double & q2) const
+    KKRvD2024BFormFactors<VacuumToPiPi>::z(const complex<double> & q2) const
     {
         return _z(q2, this->_t_0());
     }
@@ -245,6 +245,13 @@ namespace eos
 
         const auto b0 = (phi_z0 - cr * B1_z0 - std::conj(cr) * B2_z0) / (B1_z0 * B2_z0) - rest_of_series_z0;
         return real(b0); // Fix this real !!!!
+    }
+
+    complex<double>
+    KKRvD2024BFormFactors<VacuumToPiPi>::f_p(const double & q2) const
+    {
+        static const double eps = 1.0e-12;
+        return f_p(complex<double>(q2, eps));
     }
 
     complex<double>

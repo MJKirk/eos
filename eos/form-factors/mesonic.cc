@@ -601,6 +601,18 @@ namespace eos
         return std::arg(this->f_p(q2));
     }
 
+    double
+    FormFactors<VacuumToPP>::re_f_p(const double & re_q2, const double & im_q2) const
+    {
+        return std::real(this->f_p(complex<double>(re_q2, im_q2)));
+    }
+
+    double
+    FormFactors<VacuumToPP>::im_f_p(const double & re_q2, const double & im_q2) const
+    {
+        return std::imag(this->f_p(complex<double>(re_q2, im_q2)));
+    }
+
     const std::map<FormFactorFactory<VacuumToPP>::KeyType, FormFactorFactory<VacuumToPP>::ValueType>
     FormFactorFactory<VacuumToPP>::form_factors
     {

@@ -57,8 +57,6 @@ class ParametricKKRvD2024Test :
                 p["pi->pi::b_(+,1)^9@KKRvD2024"] = 0.0;
                 p["pi->pi::M_(+,1)@KKRvD2024"] = 0.76173;
                 p["pi->pi::Gamma_(+,1)@KKRvD2024"] = 0.14620;
-                p["pi->pi::Re{c}_(+,1)@KKRvD2024"] = -0.21691;
-                p["pi->pi::Im{c}_(+,1)@KKRvD2024"] = 0.0030072;
 
                 /* P->P factory */
                 {
@@ -136,8 +134,6 @@ class ParametricKKRvD2024Test :
                 p["pi->pi::b_(+,1)^9@KKRvD2024"] = 0.0;
                 p["pi->pi::M_(+,1)@KKRvD2024"] = 0.76032;
                 p["pi->pi::Gamma_(+,1)@KKRvD2024"] = 0.14638;
-                p["pi->pi::Re{c}_(+,1)@KKRvD2024"] = 0.32927;
-                p["pi->pi::Im{c}_(+,1)@KKRvD2024"] = 0.43654;
 
                 /* P->P factory */
                 {

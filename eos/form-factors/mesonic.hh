@@ -319,6 +319,10 @@ namespace eos
             virtual double abs2_f_p(const double & q2) const;
             virtual double arg_f_p(const double & q2) const;
 
+            virtual complex<double> f_p(const complex<double> & q2) const = 0;
+            virtual double re_f_p(const double & re_q2, const double & im_q2) const;
+            virtual double im_f_p(const double & re_q2, const double & im_q2) const;
+
             // scalar form factor
             virtual complex<double> f_0(const double & q2) const = 0;
 
