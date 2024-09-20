@@ -160,6 +160,15 @@ namespace eos
             virtual complex<double> f_0(const double & q2) const;
 
             virtual complex<double> f_p(const complex<double> & q2) const override;
+
+            double get_b0() const;
+            complex<double> get_residue() const;
+            double get_residue_real() const;
+            double get_residue_imag() const;
+            static std::vector<OptionSpecification>::const_iterator begin_options();
+            static std::vector<OptionSpecification>::const_iterator end_options();
+            static const std::vector<OptionSpecification> option_specifications;
+            static const std::set<ReferenceName> references;
     };
 
     extern template class KKRvD2024FormFactors<VacuumToPiPi>;

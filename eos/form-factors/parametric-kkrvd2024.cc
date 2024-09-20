@@ -277,5 +277,63 @@ namespace eos
         return 0.0; // vanishes in our approximation
     }
 
+    double KKRvD2024FormFactors<VacuumToPiPi>::get_b0() const
+    {
+        const auto chi = 0.0258815; // GeV^-2, from Meril at Q^2 = 1 GeV^2
+        const auto zr  =  this->_zr(this->_M_fp_I1(), this->_G_fp_I1());
+        return _b0_fp_I1(chi, zr);
+    }
+
+    complex<double> KKRvD2024FormFactors<VacuumToPiPi>::get_residue() const
+    {
+        // Super-threshold pole location
+        const auto zr =  this->_zr(this->_M_fp_I1(), this->_G_fp_I1());
+
+        const auto chi         = 0.0258815; // GeV^-2, from Meril at Q^2 = 1 GeV^2
+        const auto phi         = this->phi_p(zr, chi);
+
+        // prepare expansion coefficients
+        std::array<double, 10> b;
+        std::copy(_b_fp_I1.cbegin(), _b_fp_I1.cend(), b.begin()+1);
+        // Fix b[0] to enforce F(q2=0) = 1
+        b[0] = _b0_fp_I1(chi, zr);
+
+        const auto series      = this->series_m(zr, b);
+
+        return series / (zr - std::conj(zr)) /  phi; // the weight factor has been absorbed into 1 / phi
+    }
+
+    double KKRvD2024FormFactors<VacuumToPiPi>::get_residue_real() const
+    {
+        return std::real(get_residue());
+    }
+
+    double KKRvD2024FormFactors<VacuumToPiPi>::get_residue_imag() const
+    {
+        return std::imag(get_residue());
+    }
+
+    const std::set<ReferenceName>
+    KKRvD2024FormFactors<VacuumToPiPi>::references
+    {
+    };
+
+    const std::vector<OptionSpecification>
+    KKRvD2024FormFactors<VacuumToPiPi>::option_specifications
+    {
+    };
+
+    std::vector<OptionSpecification>::const_iterator
+    KKRvD2024FormFactors<VacuumToPiPi>::begin_options()
+    {
+        return option_specifications.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    KKRvD2024FormFactors<VacuumToPiPi>::end_options()
+    {
+        return option_specifications.cend();
+    }
+
     template class KKRvD2024FormFactors<VacuumToPiPi>;
 }

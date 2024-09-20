@@ -31,6 +31,7 @@
 #include <eos/form-factors/parametric-bgl1997.hh>
 #include <eos/form-factors/parametric-bfw2010.hh>
 #include <eos/form-factors/parametric-bmrvd2022.hh>
+#include <eos/form-factors/parametric-kkrvd2024.hh>
 #include <eos/form-factors/parametric-kkvdz2022.hh>
 #include <eos/form-factors/unitarity-bounds.hh>
 #include <eos/form-factors/zero-recoil-sum-rule.hh>
@@ -2295,7 +2296,13 @@ namespace eos
                         &FormFactors<VacuumToPP>::re_f_p, std::make_tuple("Re{q2}", "Im{q2}")),
 
                 make_form_factor_adapter("0->pipi::Ime{f_+}(q2)", R"(\text{arg}(f_+^{\pi \to \pi}(q^2)))",
-                        &FormFactors<VacuumToPP>::im_f_p, std::make_tuple("Re{q2}", "Im{q2}"))
+                        &FormFactors<VacuumToPP>::im_f_p, std::make_tuple("Re{q2}", "Im{q2}")),
+                make_observable("0->pipi::b0", R"(b_0)", Unit::None(),
+                        &KKRvD2024FormFactors<VacuumToPiPi>::get_b0),
+                make_observable("0->pipi::real_c", R"(b_0)", Unit::None(),
+                        &KKRvD2024FormFactors<VacuumToPiPi>::get_residue_real),
+                make_observable("0->pipi::imag_c", R"(b_0)", Unit::None(),
+                        &KKRvD2024FormFactors<VacuumToPiPi>::get_residue_imag)
             }
         };
 
