@@ -39,7 +39,7 @@ namespace eos
     {
         private:
             // parameters for form factor f_+ (I=1 projection)
-            std::array<UsedParameter, 9u> _b_fp_I1;
+            std::array<UsedParameter, 8u> _b_fp_I1;
             UsedParameter _M_fp_I1;
             UsedParameter _G_fp_I1;
 
@@ -78,6 +78,7 @@ namespace eos
             }
 
             double _b0_fp_I1(const double & chi, const complex<double> & zr) const;
+            double _b1_fp_I1(const double & chi, const complex<double> & zr) const;
 
         public:
             KKRvD2024FormFactors(const Parameters & p, const Options & o);
@@ -88,6 +89,7 @@ namespace eos
             /* auxiliary functions */
             double z(const double & q2) const;
             double phi_p(const double & z, const double & chi) const;
+            double phiprime_p_m1(const double & chi) const;
             double series_m(const double & z, const std::array<double, 10u> & c) const;
 
             virtual double f_p(const double & q2) const override;
@@ -103,7 +105,7 @@ namespace eos
     {
         private:
             // parameters for form factor f_+ (I=1 projection)
-            std::array<UsedParameter, 9u> _b_fp_I1;
+            std::array<UsedParameter, 8u> _b_fp_I1;
             UsedParameter _M_fp_I1;
             UsedParameter _G_fp_I1;
 
@@ -143,6 +145,7 @@ namespace eos
             }
 
             double _b0_fp_I1(const double & chi, const complex<double> & zr) const;
+            double _b1_fp_I1(const double & chi, const complex<double> & zr) const;
 
         public:
             KKRvD2024FormFactors(const Parameters & p, const Options & o);
@@ -153,6 +156,7 @@ namespace eos
             /* auxiliary functions */
             complex<double> z(const complex<double> & q2) const;
             complex<double> phi_p(const complex<double> & z, const double & chi) const;
+            complex<double> phiprime_p_m1(const double & chi) const;
             complex<double> series_m(const complex<double> & z, const std::array<double, 10u> & c) const;
 
             virtual complex<double> f_p(const double & q2) const;

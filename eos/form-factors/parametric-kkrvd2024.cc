@@ -32,7 +32,6 @@ namespace eos
 {
     KKRvD2024FormFactors<PiToPi>::KKRvD2024FormFactors(const Parameters & p, const Options & /*o*/) :
         _b_fp_I1{{
-            UsedParameter(p[_par_name("+", "1", "1")], *this),
             UsedParameter(p[_par_name("+", "1", "2")], *this),
             UsedParameter(p[_par_name("+", "1", "3")], *this),
             UsedParameter(p[_par_name("+", "1", "4")], *this),
@@ -81,6 +80,18 @@ namespace eos
     }
 
     double
+    KKRvD2024FormFactors<PiToPi>::phiprime_p_m1(const double & chi) const
+    {
+        const double t_p     = this->_t_p();
+        const double t_0     = this->_t_0();
+        const double tfactor = 1.0 - t_0 / t_p;
+        const double Q2      = 1.0;
+
+        return  -1 / (64 * std::sqrt(6 * M_PI * t_p * chi) * power_of<2>(Q2 + t_p))
+                   * pow(tfactor, 5.0/4.0) * power_of<2>(t_p) * (-7 * std::sqrt(1.0 + Q2 / t_p) + sqrt(tfactor) * (6.0 + std::sqrt(1.0 + Q2 / t_p)));
+    }
+
+    double
     KKRvD2024FormFactors<PiToPi>::series_m(const double & z, const std::array<double, 10u> & c) const
     {
         std::array<double, 10> zvalues;
@@ -97,17 +108,55 @@ namespace eos
     double
     KKRvD2024FormFactors<PiToPi>::_b0_fp_I1(const double & chi, const complex<double> & zr) const
     {
-        const double z0     = this->z(0.0);
-        const double phi_z0 = this->phi_p(z0, chi);
+        const double z0          = this->z(0.0);
+        const double phi_z0      = this->phi_p(z0, chi);
+        const double phi_m1      = this->phi_p(-1.0, chi);
+        const double phiprime_m1 = this->phiprime_p_m1(chi);
+
+        const double x_z0 = 1 / (phi_z0 * std::norm(z0 - zr));
+        const double x_m1 = 1 / (phi_m1 * std::norm(1.0 + zr));
+        const double xprime_m1 = (2.0 * (1 + std::real(zr)) * phi_m1 - std::norm(1.0 + zr) * phiprime_m1 ) / power_of<2>(std::norm(1.0 + zr) * phi_m1);
 
         std::array<double, 10> b;
         b[0] = 0.0;
-        std::copy(_b_fp_I1.cbegin(), _b_fp_I1.cend(), b.begin()+1);
-        const auto rest_of_series_z0 = this->series_m(z0, b);
+        b[1] = 0.0;
+        std::copy(_b_fp_I1.cbegin(), _b_fp_I1.cend(), b.begin()+2);
 
-        const auto b0 = std::norm(z0 - zr) * phi_z0 - rest_of_series_z0;
+        double sum = 0.0;
+        for (auto i = 0u; i < b.size(); i++)
+        {
+            sum += b[i] * ( (pow(-1, i) * i + pow(z0, i-1)) * x_m1 - (pow(-1, i) + pow(z0, i-1)) * xprime_m1 );
+        };
 
+        const double b0 = std::real((x_m1 - xprime_m1 - x_z0 * z0 * sum) / (x_z0 * (x_m1 - (1.0 + z0) * xprime_m1)));
         return b0;
+    }
+
+    double
+    KKRvD2024FormFactors<PiToPi>::_b1_fp_I1(const double & chi, const complex<double> & zr) const
+    {
+        const double z0          = this->z(0.0);
+        const double phi_z0      = this->phi_p(z0, chi);
+        const double phi_m1      = this->phi_p(-1.0, chi);
+        const double phiprime_m1 = this->phiprime_p_m1(chi);
+
+        const double x_z0 = 1 / (phi_z0 * std::norm(z0 - zr));
+        const double x_m1 = 1 / (phi_m1 * std::norm(1.0 + zr));
+        const double xprime_m1 = (2.0 * (1 + std::real(zr)) * phi_m1 - std::norm(1.0 + zr) * phiprime_m1 ) / power_of<2>(std::norm(1.0 + zr) * phi_m1);
+
+        std::array<double, 10> b;
+        b[0] = 0.0;
+        b[1] = 0.0;
+        std::copy(_b_fp_I1.cbegin(), _b_fp_I1.cend(), b.begin()+2);
+
+        double sum = 0.0;
+        for (auto i = 0u; i < b.size(); i++)
+        {
+            sum += b[i] * (pow(-1, i) * i * x_m1 + (pow(-1, i+1) + pow(z0, i)) * xprime_m1);
+        };
+
+        const double b1 = (sum * x_z0 -  xprime_m1) / ( x_z0 * (x_m1 - (1.0 + z0) * xprime_m1));
+        return b1;
     }
 
     double
@@ -124,9 +173,10 @@ namespace eos
 
         // prepare expansion coefficients
         std::array<double, 10> b;
-        std::copy(_b_fp_I1.cbegin(), _b_fp_I1.cend(), b.begin()+1);
-        // Fix b[0] to enforce F(q2=0) = 1
+        std::copy(_b_fp_I1.cbegin(), _b_fp_I1.cend(), b.begin()+2);
+        // Fix b[0] and b[1] to enforce F(q2=0) = 1 and F'(q2=t+) = 0
         b[0] = _b0_fp_I1(chi, zr);
+        b[1] = _b1_fp_I1(chi, zr);
 
         const auto series      = this->series_m(z, b);
 
@@ -158,7 +208,6 @@ namespace eos
     /* Vacuum -> pi pi */
     KKRvD2024FormFactors<VacuumToPiPi>::KKRvD2024FormFactors(const Parameters & p, const Options & /*o*/) :
         _b_fp_I1{{
-            UsedParameter(p[_par_name("+", "1", "1")], *this),
             UsedParameter(p[_par_name("+", "1", "2")], *this),
             UsedParameter(p[_par_name("+", "1", "3")], *this),
             UsedParameter(p[_par_name("+", "1", "4")], *this),
@@ -207,6 +256,18 @@ namespace eos
     }
 
     complex<double>
+    KKRvD2024FormFactors<VacuumToPiPi>::phiprime_p_m1(const double & chi) const
+    {
+        const double t_p     = this->_t_p();
+        const double t_0     = this->_t_0();
+        const double tfactor = 1.0 - t_0 / t_p;
+        const double Q2      = 1.0;
+
+        return  -1 / (64 * std::sqrt(6 * M_PI * t_p * chi) * power_of<2>(Q2 + t_p))
+                   * pow(tfactor, 5.0/4.0) * power_of<2>(t_p) * (-7 * std::sqrt(1.0 + Q2 / t_p) + sqrt(tfactor) * (6.0 + std::sqrt(1.0 + Q2 / t_p)));
+    }
+
+    complex<double>
     KKRvD2024FormFactors<VacuumToPiPi>::series_m(const complex<double> & z, const std::array<double, 10u> & c) const
     {
         std::array<complex<double>, 10> zvalues;
@@ -223,17 +284,55 @@ namespace eos
     double
     KKRvD2024FormFactors<VacuumToPiPi>::_b0_fp_I1(const double & chi, const complex<double> & zr) const
     {
-        const complex<double> z0     = this->z(0.0);
-        const complex<double> phi_z0 = this->phi_p(z0, chi);
+        const complex<double> z0          = this->z(0.0);
+        const complex<double> phi_z0      = this->phi_p(z0, chi);
+        const complex<double> phi_m1      = this->phi_p(-1.0, chi);
+        const complex<double> phiprime_m1 = this->phiprime_p_m1(chi);
+
+        const complex<double> x_z0 = 1.0 / (phi_z0 * std::norm(z0 - zr));
+        const complex<double> x_m1 = 1.0 / (phi_m1 * std::norm(1.0 + zr));
+        const complex<double> xprime_m1 = (2.0 * (1 + std::real(zr)) * phi_m1 - std::norm(1.0 + zr) * phiprime_m1 ) / power_of<2>(std::norm(1.0 + zr) * phi_m1);
 
         std::array<double, 10> b;
         b[0] = 0.0;
-        std::copy(_b_fp_I1.cbegin(), _b_fp_I1.cend(), b.begin()+1);
-        const auto rest_of_series_z0 = this->series_m(z0, b);
+        b[1] = 0.0;
+        std::copy(_b_fp_I1.cbegin(), _b_fp_I1.cend(), b.begin()+2);
 
-        const auto b0 = std::norm(z0 - zr) * phi_z0 - rest_of_series_z0;
+        complex<double> sum = 0.0;
+        for (auto i = 0u; i < b.size(); i++)
+        {
+            sum += b[i] * ( (pow(-1, i) * i + pow(z0, i-1)) * x_m1 - (pow(-1, i) + pow(z0, i-1)) * xprime_m1 );
+        };
 
-        return std::real(b0); // all coefficients are real by construction
+        const double b0 = std::real((x_m1 - xprime_m1 - x_z0 * z0 * sum) / (x_z0 * (x_m1 - (1.0 + z0) * xprime_m1)));
+        return b0;
+    }
+
+    double
+    KKRvD2024FormFactors<VacuumToPiPi>::_b1_fp_I1(const double & chi, const complex<double> & zr) const
+    {
+        const complex<double> z0          = this->z(0.0);
+        const complex<double> phi_z0      = this->phi_p(z0, chi);
+        const complex<double> phi_m1      = this->phi_p(-1.0, chi);
+        const complex<double> phiprime_m1 = this->phiprime_p_m1(chi);
+
+        const complex<double> x_z0 = 1.0 / (phi_z0 * std::norm(z0 - zr));
+        const complex<double> x_m1 = 1.0 / (phi_m1 * std::norm(1.0 + zr));
+        const complex<double> xprime_m1 = (2.0 * (1 + std::real(zr)) * phi_m1 - std::norm(1.0 + zr) * phiprime_m1 ) / power_of<2>(std::norm(1.0 + zr) * phi_m1);
+
+        std::array<double, 10> b;
+        b[0] = 0.0;
+        b[1] = 0.0;
+        std::copy(_b_fp_I1.cbegin(), _b_fp_I1.cend(), b.begin()+2);
+
+        complex<double> sum = 0.0;
+        for (auto i = 0u; i < b.size(); i++)
+        {
+            sum += b[i] * (pow(-1, i) * i * x_m1 + (pow(-1, i+1) + pow(z0, i)) * xprime_m1);
+        };
+
+        const double b1 = std::real((sum * x_z0 -  xprime_m1) / ( x_z0 * (x_m1 - (1.0 + z0) * xprime_m1)));
+        return b1;
     }
 
     complex<double>
@@ -255,9 +354,10 @@ namespace eos
 
         // prepare expansion coefficients
         std::array<double, 10> b;
-        std::copy(_b_fp_I1.cbegin(), _b_fp_I1.cend(), b.begin()+1);
-        // Fix b[0] to enforce F(q2=0) = 1
+        std::copy(_b_fp_I1.cbegin(), _b_fp_I1.cend(), b.begin()+2);
+        // Fix b[0] and b[1] to enforce F(q2=0) = 1 and F'(q2=t+) = 0
         b[0] = _b0_fp_I1(chi, zr);
+        b[1] = _b1_fp_I1(chi, zr);
 
         const auto series      = this->series_m(z, b);
 
