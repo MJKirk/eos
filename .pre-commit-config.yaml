@@ -33,8 +33,9 @@ repos:
     - id: rst-directive-colons
     - id: rst-inline-touching-normal
 
- - repo: https://github.com/eos/pre-commit-hooks
-   rev: v1.0.1
+ - repo: https://github.com/MJKirk/pre-commit-hooks
+   rev: 03f05c8682dd7c56b97136bf173f625cf0cf6f4b
    hooks:
     - id: eos-test-check-argument-order
       exclude: '^test/test_TEST.cc$'
+    - id: eos-test-check-references
