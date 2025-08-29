@@ -40,3 +40,4 @@ repos:
       exclude: '^test/test_TEST.cc$'
     - id: eos-test-ordereddict-usage
       exclude: '^src/scripts/eos-make-constraint'
+    - id: eos-test-check-references
