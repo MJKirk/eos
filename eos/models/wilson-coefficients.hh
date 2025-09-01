@@ -238,7 +238,7 @@ namespace eos
             /*! Default ctor */
             WilsonCoefficients();
 
-            // Misiak basis, cf. [BMU:1999], Eq. (2), p. 3
+            // Misiak basis, cf. [BMU:1999A], Eq. (2), p. 3
             inline complex<double>
             c1() const
             {
@@ -393,7 +393,7 @@ namespace eos
     /*!
      * Evolution of b -> s Wilson coefficients
      *
-     * Calculation according to [BMU:1999], Eq. (25). The helicity-flipped, scalar,
+     * Calculation according to [BMU:1999A], Eq. (25). The helicity-flipped, scalar,
      * pseudoscalar, and tensor components are implicitly kept at zero.
      *
      * @param wc_qcd_0  The initial scale Wilson coefficients at O(alpha_s^0)

@@ -97,7 +97,7 @@ namespace eos
             result -= lambda / (m_B + m_Dstar) * ff->a_2(q2);
             result /= (2.0 * m_Dstar * sqrt(q2));
 
-            // cf. [DDS:2014], eq. (22), p. 17
+            // cf. [DDS:2014A], eq. (22), p. 17
             return result;
         }
 
@@ -106,7 +106,7 @@ namespace eos
             const double m_B     = this->m_B();
             const double m_Dstar = this->m_Dstar();
 
-            // cf. [DDS:2014], eq. (22), p. 17
+            // cf. [DDS:2014A], eq. (22), p. 17
             return sqrt(2.0) * (m_B + m_Dstar) * ff->a_1(q2);
         }
 
@@ -116,7 +116,7 @@ namespace eos
             const double m_Dstar = this->m_Dstar(), m_Dstar2 = m_Dstar * m_Dstar;
             const double lambda  = eos::lambda(m_B2, m_Dstar2, q2);
 
-            // cf. [DDS:2014], eq. (22), p. 17
+            // cf. [DDS:2014A], eq. (22), p. 17
             return -sqrt(2.0) * sqrt(lambda) / (m_B + m_Dstar) * ff->v(q2);
         }
 
@@ -126,7 +126,7 @@ namespace eos
             const double m_Dstar = this->m_Dstar(), m_Dstar2 = m_Dstar * m_Dstar;
             const double lambda  = eos::lambda(m_B2, m_Dstar2, q2);
 
-            // cf. [DDS:2014], eq. (22), p. 17
+            // cf. [DDS:2014A], eq. (22), p. 17
             return sqrt(lambda / q2) * ff->a_0(q2);
         }
 
