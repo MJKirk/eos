@@ -247,7 +247,7 @@ namespace eos
         double b_0 = beta[0]; // We do not need to adjust for a factor of 4 when using [BBMU:2003A], Eq. (A.8).
         double L   = log(m_q_MSbar / (2.0 * mu));
 
-        // cf. [BBMU:2003A], Eq. (A.8) and the underlying work [MvR:2000]. Note that
+        // cf. [BBMU:2003A], Eq. (A.8) and the underlying work [MvR:1999A]. Note that
         // the latter does use 4 beta_0 = beta_0|here.
         return m_q_MSbar
                * (1.0

@@ -6202,7 +6202,7 @@ groups:
   - title: 'Parameters in P->PP form-factor parametrization'
     description: ''
     parameters:
-      # Masses used in [HKVT:2025A]
+      # Masses used in [HKvT:2025A]
       'mass::pi^+@HKvT2025' :
           central: +0.13957
           min:     +0.13957

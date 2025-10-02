@@ -286,7 +286,7 @@ namespace eos
                    );
         }
 
-        // normalized to |V_cQ = 1|, obtained using cf. [DSD:2014A], eq. (12), agrees with Sakaki'13 et al cf. [STTW:2013A]
+        // normalized to |V_cQ = 1|, obtained using cf. [DDS:2014A], eq. (12), agrees with Sakaki'13 et al cf. [STTW:2013A]
         double normalized_differential_decay_width(const double & s) const
         {
             d_to_psd_l_nu::Amplitudes amp(this->amplitudes(s));

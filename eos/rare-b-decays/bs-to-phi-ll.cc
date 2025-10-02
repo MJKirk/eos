@@ -959,7 +959,7 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
                                                               const BsToPhiDilepton::Amplitudes & Atilda,
                                                               const double & s) const
     {
-        // cf. [DV:2015], eqs. (117)-(128)
+        // cf. [DV:2015A], eqs. (117)-(128)
         std::array<double, 12> result;
 
         double m_l = bstophidilepton.m_l();

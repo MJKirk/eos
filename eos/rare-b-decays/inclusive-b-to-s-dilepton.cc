@@ -433,7 +433,7 @@ namespace eos
             {
                 /*
                  * diagonal (i = j) and interference terms are read off the
-                 * matching between Eq. (111) from [HLWM:2005] and Eq. (3.9)
+                 * matching between Eq. (111) from [HLMW:2005A] and Eq. (3.9)
                  * from [GN:1997A].
                  */
 
