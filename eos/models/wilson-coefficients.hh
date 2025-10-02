@@ -39,7 +39,7 @@ namespace eos
         {}; // |Delta B| = 1 semileptonic operators, cf. [AFGV:2017A], eq. (2.5), p. 6.
 
         struct ClassIII
-        {}; // |Delta B| = 1 = |Delta C| four-quark operators, cf. [AFGB:2017A], eq. (2.6), p. 7.
+        {}; // |Delta B| = 1 = |Delta C| four-quark operators, cf. [AFGV:2017A], eq. (2.6), p. 7.
     } // namespace bern
 
     using ChargedCurrent = bern::ClassII;
@@ -94,7 +94,7 @@ namespace eos
     template <> struct WilsonCoefficients<bern::ClassIII>
     {
             /*
-             * Following the definitions in [AFGB:2017A], cf. Table 1 and Eq. (2.6).
+             * Following the definitions in [AFGV:2017A], cf. Table 1 and Eq. (2.6).
              */
             std::array<complex<double>, 10> _unprimed, _primed;
 

@@ -338,7 +338,7 @@ namespace eos
     complex<double>
     CharmLoops::F17_massive(const double & mu, const double & s, const double & m_b, const double & m_c)
     {
-        // cf. [ABGW:2001], Appendix B, pp. 34-38
+        // cf. [AAGW:2001A], Appendix B, pp. 34-38
         static double kap1700[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -540,7 +540,7 @@ namespace eos
     complex<double>
     CharmLoops::F27_massive(const double & mu, const double & s, const double & m_b, const double & m_q)
     {
-        // cf. [ABGW:2001], Appendix B, pp. 34-38
+        // cf. [AAGW:2001A], Appendix B, pp. 34-38
         static double kap2700[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -713,7 +713,7 @@ namespace eos
         if (abs(s) < 1e-6) // allow for s = 1e-6, corresponding roughly to the dielectron threshold
             throw InternalError("CharmLoops::F19_massive: F19 diverges for s -> 0. Check that F19 enters via 's * F19(s)' and replace by zero.");
 
-        // cf. [ABGW:2001], Appendix B, pp. 34-38
+        // cf. [AAGW:2001A], Appendix B, pp. 34-38
         static double kap1900[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -904,7 +904,7 @@ namespace eos
         if (abs(s) < 1e-6) // allow for s = 1e-6, corresponding roughly to the dielectron threshold
             throw InternalError("CharmLoops::F29_massive: F29 diverges for s -> 0. Check that F29 enters via 's * F29(s)' and replace by zero.");
 
-        // cf. [ABGW:2001], Appendix B, pp. 34-38
+        // cf. [AAGW:2001A], Appendix B, pp. 34-38
         static double kap2900[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
