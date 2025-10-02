@@ -450,6 +450,20 @@ BJvD:2019A:
   inspire-id: Bordone:2019vic
   title: Theory determination of $\bar{B}\to D^{(*)}\ell^-\bar\nu$ form factors at
     $\mathcal{O}(1/m_c^2)$
+BKMS:2012A:
+  authors: Becirevic, Damir and Kosnik, Nejc and Mescia, Federico and Schneider, Elia
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1205.5811
+  inspire-id: Becirevic:2012fy
+  title: Complementarity of the constraints on New Physics from $B_s \to  \mu^+ \mu^-$ and from $B \to  K l^+l^-$ decays
+BKTvD:2019A:
+authors: B{\"o}er, Philipp and Kokulu, Ahmet and Toelstede, Jan-Niklas and van Dyk, Danny
+eprint:
+  archive: arXiv
+  id: oai:arXiv.org:1907.12554
+inspire-id: Boer:2019zmp
+title: Angular Analysis of $\Lambda_b\to \Lambda_c (\to \Lambda \pi)\ell\bar\nu$
 BL:1998A:
   authors: Buck, W. W. and Lebed, Richard F.
   eprint:
