@@ -84,7 +84,7 @@ namespace eos
         static complex<double> C0(const double & s, const double & m_q);
 
         // Contributions proportional to Q_s = Q_b arising from intermediate ccbar pairs at NLO in alpha_s.
-        // These contributions are interpolated from reference values from [AGV:2019]
+        // These contributions are interpolated from reference values from [AGV:2019A]
         // In particular mu = m_b = 4.18 and alpha_s(M_Z) = 0.1185
         static complex<double> F17_massive_Qsb(const double & s);
         static complex<double> F19_massive_Qsb(const double & s);
