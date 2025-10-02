@@ -48,6 +48,13 @@ AFGV:2017A:
     id: oai:arXiv.org:1704.06639
   inspire-id: Aebischer:2017gaw
   title: 'B physics Beyond the Standard Model at One Loop: Complete Renormalization Group Evolution below the Electroweak Scale'
+AGV:2019A:
+  authors: Asatrian, Hrachia M. and Greub, Christoph and Virto, Javier
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1912.09099
+  inspire-id: Asatrian:2019kbk
+  title: Exact NLO matching and analyticity in $b\to s\ell\ell$
 ALGH:2001A:
   authors: Ali, A. and Lunghi, E. and Greub, C. and Hiller, G.
   eprint:
@@ -191,6 +198,13 @@ BCMU:2002A:
     id: oai:arXiv.org:hep-ph/0203135
   inspire-id: Buras:2002tp
   title: Completing the NLO QCD calculation of $\bar{B} \to X_s \gamma$
+BCvDV:2017A:
+  authors: Bobeth, Christoph and Chrzaszcz, Marcin and van Dyk, Danny and Virto, Javier
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1707.07305
+  inspire-id: Bobeth:2017vxj
+  title: Long-distance effects in $B\rightarrow K^*\ell \ell $ from analyticity
 BEKU:2002A:
   authors: Bobeth, C. and Ewerth, T. and Kruger, F. and Urban, J.
   eprint:
@@ -470,6 +484,13 @@ BJvD:2019A:
   inspire-id: Bordone:2019vic
   title: Theory determination of $\bar{B}\to D^{(*)}\ell^-\bar\nu$ form factors at
     $\mathcal{O}(1/m_c^2)$
+BL:1998A:
+  authors: Buck, W. W. and Lebed, Richard F.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ph/9802369
+  inspire-id: Buck:1998kp
+  title: New constraints on dispersive form-factor parameterizations from the timelike region
 BLPR:2017A:
   authors: Bernlochner, Florian U. and Ligeti, Zoltan and Papucci, Michele and Robinson, Dean J.
   eprint:
@@ -493,6 +514,13 @@ BMU:1999A:
   inspire-id: Bobeth:1999mk
   title: Photonic penguins at two loops and $m_t$ dependence of $\mathcal{B}(B \to  X_s \ell^+
     \ell^-)$
+BMRvD:2022A:
+authors: Blake, Thomas and Meinel, Stefan and Rahimi, Muslem and van Dyk, Danny
+eprint:
+  archive: arXiv
+  id: oai:arXiv.org:2205.06041
+inspire-id: Blake:2022vfl
+title: Dispersive bounds for local form factors in $\Lambda_b \to \Lambda$ transitions
 BMvD:2019A:
   authors: Blake, Thomas and Meinel, Stefan and van Dyk, Danny
   eprint:
@@ -522,6 +550,13 @@ BRV:2024A:
     id: oai:arXiv.org:2504.05209
   inspire-id: BurgosMarcos:2025xja
   title: Detailed $SU(3)$ Flavour Symmetry Analysis of Charmless Two-Body $B$-Meson Decays Including Factorizable Corrections
+BRY:2006A:
+  authors: Beneke, Martin and Rohrer, Johannes and Yang, Deshan
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ph/0612290
+  inspire-id: Beneke:2006hg
+  title: Branching fractions, polarisation and asymmetries of $B \to VV$ decays
 BRvDV:2024A:
   authors: Bolognani, Carolina and Reboud, M{\'e}ril and van Dyk, Danny and Vos, K. Keri
   eprint:
@@ -1308,6 +1343,13 @@ DN:2019A:
     id: oai:arXiv.org:1903.00448
   inspire-id: Descotes-Genon:2019dbw
   title: Angular analysis of the rare decay $\Lambda_b\to \Lambda(1520)(\to NK)\ell^+\ell^-$
+DV:2015A:
+  authors: Descotes-Genon, S{\'e}bastien and Virto, Javier
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1502.05509
+  inspire-id: Descotes-Genon:2015hea
+  title: Time dependence in $B \to V\ell\ell$ decays
 EGN:2010A:
   authors: Ewerth, Thorsten and Gambino, Paolo and Nandi, Soumitra
   eprint:
@@ -1355,6 +1397,13 @@ F:2012A:
   inspire-id: Fleischer:2012fy
   title: On Branching Ratios of $B_s$ Decays and the Search for New Physics in $B^0_s\to
     \mu^+\mu^-$
+FJV:2016A:
+  authors: Fleischer, Robert and Jaarsma, Ruben and Vos, K. Keri
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1612.07342
+  inspire-id: Fleischer:2016ofb
+  title: Towards New Frontiers in the Exploration of Charmless Non-Leptonic $B$ Decays
 FK:2002A:
   authors: Feldmann, T. and Kroll, P.
   eprint:
@@ -1574,6 +1623,13 @@ GRvDV:2021A:
     id: oai:arXiv.org:2206.03797
   inspire-id: Gubernari:2022hxn
   title: Improved theory predictions and global analysis of exclusive $b \to s\mu^+\mu^-$ processes
+GRvD:2022A:
+  authors: Gubernari, Nico and Reboud, M{\'e}ril and van Dyk, Danny and Virto, Javier
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2206.03797
+  inspire-id: Gubernari:2022hxn
+  title: Improved theory predictions and global analysis of exclusive $b \to s\mu^+\mu^-$ processes
 GRvDV:2023A:
   authors: Gubernari, Nico and Reboud, Méril and van Dyk, Danny and Virto, Javier
   eprint:
@@ -1716,6 +1772,13 @@ HPQCD:2023A:
     id: oai:arXiv.org:2304.03137
   inspire-id: Harrison:2023dzh
   title: $B \rightarrow D^*$ vector, axial-vector and tensor form factors for the full $q^2$ range from lattice QCD
+HTX:2021A:
+  authors: Huber, Tobias and Tetlalmatzi-Xolocotzi, Gilberto
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2111.06418
+  inspire-id: Huber:2021cgk
+  title: Estimating QCD-factorization amplitudes through SU(3) symmetry in $B\rightarrow P P$ decays
 IKKR:2007A:
   authors: Ivanov, Mikhail A. and Korner, Jurgen G. and Kovalenko, Sergey G. and Roberts,
     Craig D.
