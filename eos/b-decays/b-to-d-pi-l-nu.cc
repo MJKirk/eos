@@ -146,7 +146,7 @@ namespace eos
             const double a_2 = ff->a_2(q2);
             const double v   = ff->v(q2);
 
-            // cf. [CJLP:2012]
+            // cf. [CJLP:2012A]
             const double H_pp = (m_B + m_Dstar) * a_1 - 2.0 * m_B / (m_B + m_Dstar) * p_Dstar * v;
             const double H_mm = (m_B + m_Dstar) * a_1 + 2.0 * m_B / (m_B + m_Dstar) * p_Dstar * v;
             const double H_00 = ((m_B2 - m_Dstar2 - q2) * (m_B + m_Dstar) * a_1 - 4.0 * m_B2 * p_Dstar2 * a_2 / (m_B + m_Dstar))
@@ -158,7 +158,7 @@ namespace eos
             const double H_002 = H_00 * H_00;
             const double H_0t2 = H_0t * H_0t;
 
-            // cf. [CJLP:2012], eq. (22), p. 17
+            // cf. [CJLP:2012A], eq. (22), p. 17
             const double num   = (H_pp2 + H_mm2 + H_002) * (1.0 - m_l2 / (2.0 * q2)) - 3.0 * m_l2 / (2.0 * q2) * H_0t2;
 
             return nf * num;
@@ -180,7 +180,7 @@ namespace eos
             const double a_2 = ff->a_2(q2);
             const double v   = ff->v(q2);
 
-            // cf. [CJLP:2012]
+            // cf. [CJLP:2012A]
             const double H_pp = (m_B + m_Dstar) * a_1 - 2.0 * m_B / (m_B + m_Dstar) * p_Dstar * v;
             const double H_mm = (m_B + m_Dstar) * a_1 + 2.0 * m_B / (m_B + m_Dstar) * p_Dstar * v;
             const double H_00 = ((m_B2 - m_Dstar2 - q2) * (m_B + m_Dstar) * a_1 - 4.0 * m_B2 * p_Dstar2 * a_2 / (m_B + m_Dstar))
@@ -192,7 +192,7 @@ namespace eos
             const double H_002 = H_00 * H_00;
             const double H_0t2 = H_0t * H_0t;
 
-            // cf. [CJLP:2012], eq. (22), p. 17
+            // cf. [CJLP:2012A], eq. (22), p. 17
             const double denom = (H_pp2 + H_mm2 + H_002) * (1.0 + m_l2 / (2.0 * q2)) + 3.0 * m_l2 / (2.0 * q2) * H_0t2;
 
             return nf * denom;

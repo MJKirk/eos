@@ -59,7 +59,7 @@ namespace eos
             /* Order: C_V,L, C_V,R, C_S,L, C_S,R, C_T, or equivalently: 1, 1', 5, 5', 7'. */
             std::array<complex<double>, 5> _coefficients;
 
-            // cf. [FMvD:2015], eqs. (1) and (2)
+            // cf. [FMvD:2015A], eqs. (1) and (2)
             inline complex<double>
             cvl() const
             {

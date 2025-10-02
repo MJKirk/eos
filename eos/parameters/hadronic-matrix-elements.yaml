@@ -4733,7 +4733,7 @@ groups:
     description: ''
     parameters:
       # Parameters for B*->D* form factors in the Heavy-Quark Expansion (HQE)
-      # The implementation is based on [N:1993], and inspired by the parametrization
+      # The implementation is based on [N:1993A], and inspired by the parametrization
       # in [BLPR:2017A] and its modification in [JS:2018A].
       "B(*)->D(*)::n_f@HQET" :
           central: 2.0

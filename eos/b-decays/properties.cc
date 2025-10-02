@@ -62,7 +62,7 @@ namespace eos
             double sum_rho3 = -0.5; // Assumption for the sum of 1/mb^2 operators from eq. (18)
             double delta = sum_rho3 / (3.0 * power_of<2>(model->m_b_kin(mu_kin)));
 
-            // cf. [N:1997], p. 15, eq. (32), we also consider alpha_s corrections
+            // cf. [N:1997A], p. 15, eq. (32), we also consider alpha_s corrections
             // to the rate, cf. [U:2001A], eq. (11), p. 5.
             return 2.0 / 3.0 * c * mu2_g + delta;
         }

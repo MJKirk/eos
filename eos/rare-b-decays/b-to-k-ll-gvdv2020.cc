@@ -217,7 +217,7 @@ namespace eos
             c10_p = wc.c10() + wc.c10prime(),
             c7_p  = c7eff + wc.c7prime();
 
-        // cf. [BHP:2007A], Eq. (3.2), p. 3 and 4 or [BKMS:2012] (1205.5811)
+        // cf. [BHP:2007A], Eq. (3.2), p. 3 and 4 or [BKMS:2012A] (1205.5811)
         result.F_A  = c10_p;
         result.F_T  = F_Tkin * wc.cT();
         result.F_T5 = F_Tkin * wc.cT5();

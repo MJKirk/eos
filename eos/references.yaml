@@ -484,6 +484,20 @@ BJvD:2019A:
   inspire-id: Bordone:2019vic
   title: Theory determination of $\bar{B}\to D^{(*)}\ell^-\bar\nu$ form factors at
     $\mathcal{O}(1/m_c^2)$
+BKMS:2012A:
+  authors: Becirevic, Damir and Kosnik, Nejc and Mescia, Federico and Schneider, Elia
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1205.5811
+  inspire-id: Becirevic:2012fy
+  title: Complementarity of the constraints on New Physics from $B_s \to  \mu^+ \mu^-$ and from $B \to  K l^+l^-$ decays
+BKTvD:2019A:
+  authors: B{\"o}er, Philipp and Kokulu, Ahmet and Toelstede, Jan-Niklas and van Dyk, Danny
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1907.12554
+  inspire-id: Boer:2019zmp
+  title: Angular Analysis of $\Lambda_b\to \Lambda_c (\to \Lambda \pi)\ell\bar\nu$
 BL:1998A:
   authors: Buck, W. W. and Lebed, Richard F.
   eprint:
@@ -515,12 +529,12 @@ BMU:1999A:
   title: Photonic penguins at two loops and $m_t$ dependence of $\mathcal{B}(B \to  X_s \ell^+
     \ell^-)$
 BMRvD:2022A:
-authors: Blake, Thomas and Meinel, Stefan and Rahimi, Muslem and van Dyk, Danny
-eprint:
-  archive: arXiv
-  id: oai:arXiv.org:2205.06041
-inspire-id: Blake:2022vfl
-title: Dispersive bounds for local form factors in $\Lambda_b \to \Lambda$ transitions
+  authors: Blake, Thomas and Meinel, Stefan and Rahimi, Muslem and van Dyk, Danny
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2205.06041
+  inspire-id: Blake:2022vfl
+  title: Dispersive bounds for local form factors in $\Lambda_b \to \Lambda$ transitions
 BMvD:2019A:
   authors: Blake, Thomas and Meinel, Stefan and van Dyk, Danny
   eprint:
@@ -1077,6 +1091,13 @@ CHS:2018A:
     id: oai:arXiv.org:1810.00007
   inspire-id: Colangelo:2018mtw
   title: Two-pion contribution to hadronic vacuum polarization
+CJLP:2012A:
+  authors: Celis, Alejandro and Jung, Martin and Li, Xin-Qiang and Pich, Antonio
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1210.8443
+  inspire-id: Celis:2012dk
+  title: Sensitivity to charged scalars in $\boldsymbol{B\to D^{(*)}\tau\nu_\tau}$ and $\boldsymbol{B\to\tau\nu_\tau}$ decays
 CKMfitter:2004A:
   authors: Charles, J. and Hocker, Andreas and Lacker, H. and Laplace, S. and Le Diberder,
     F.R. and Malcles, J. and Ocariz, J. and Pivk, M. and Roos, L.
@@ -1470,6 +1491,13 @@ FM:2002A:
   inspire-id: Feldmann:2002iw
   title: Forward backward and isospin asymmetry for $B \to K^* \ell^+ \ell^-$ decay in the
     standard model and in supersymmetry
+FMvD:2015A:
+  authors: Feldmann, Thorsten and M{\"u}ller, Bastian and van Dyk, Danny
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1503.09063
+  inspire-id: Feldmann:2015xsa
+  title: Analyzing $b\to u$ transitions in semileptonic $\bar{B}_s \to K^{*+}(\to K \pi)\ell^-\bar\nu_\ell$ decays
 FNAL+MILC:2014A:
   authors: Bailey, Jon A. et al.
   collaboration: Fermilab Lattice, MILC
@@ -2261,6 +2289,13 @@ MR:2021A:
   inspire-id: Meinel:2021mdj
   title: $\Lambda_c\to\Lambda^*(1520)$ form factors from lattice QCD and improved analysis of
     the $\Lambda_b\to\Lambda^*(1520)$ and $\Lambda_b\to\Lambda_c^*(2595,2625)$ form factors
+MvD:2015A:
+  authors: Mannel, Thomas and van Dyk, Danny
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1506.08780
+  inspire-id: Mannel:2015osa
+  title: Zero-recoil sum rules for $\Lambda_b \to \Lambda_c$ form factors
 MvD:2016A:
   authors: Meinel, Stefan and van Dyk, Danny
   eprint:
@@ -2283,6 +2318,20 @@ MvR:1999A:
     id: oai:arXiv.org:hep-ph/9912391
   inspire-id: Melnikov:2000qh
   title: The Three loop relation between the $\overline{\text{MS}}$ and the pole quark masses
+N:1993A:
+  authors: Neubert, Matthias
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ph/9306320
+  inspire-id: Neubert:1993mb
+  title: Heavy quark symmetry
+N:1997A:
+  authors: Neubert, Matthias
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ph/9702375
+  inspire-id: Neubert:1997gu
+  title: B decays and the heavy quark expansion
 NA7:1986A:
   authors: Amendolia, S.R. and others
   collaboration: NA7
@@ -2315,6 +2364,13 @@ PDG:2012A:
   collaboration: Particle Data Group
   inspire-id: Beringer:1900zz
   journal: Phys. Rev. D 86 010001 (2012)
+  title: Review of Particle Physics
+  url: http://pdg.lbl.gov
+PDG:2016A:
+  authors: Patrignani, C. and others
+  collaboration: Particle Data Group
+  inspire-id: ParticleDataGroup:2016lqr
+  journal: Chin.Phys.C 40 (2016) 10, 100001
   title: Review of Particle Physics
   url: http://pdg.lbl.gov
 PDG:2018A:
@@ -2437,6 +2493,13 @@ U:2001A:
   inspire-id: Uraltsev:2001ih
   title: On the chromomagnetic expectation value $\mu^2_G$ and higher power corrections
     in heavy flavor mesons
+U:2003A:
+  authors: Uraltsev, Nikolai
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ph/0312001
+  inspire-id: Uraltsev:2003ye
+  title: A 'BPS' expansion for B and D mesons
 UTFIT:2013A:
   authors: Bona, M. et al.
   collaboration: UTfit
@@ -2446,6 +2509,9 @@ UTFIT:2013A:
   inspire-id: Bona:2006ah
   title: 'The Unitarity Triangle Fit in the Standard Model and Hadronic Parameters
     from Lattice QCD: A Reappraisal after the Measurements of $\Delta m_s$ and $\mathcal{B}(B \to \tau \nu_\tau)$'
+vD:2011A:
+  authors: van Dyk, Danny
+  title: Unpublished
 vRVL:1997A:
   authors: van Ritbergen, T. and Vermaseren, J.A.M. and Larin, S.A.
   eprint:
