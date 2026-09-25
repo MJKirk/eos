@@ -176,11 +176,8 @@ The same can be achive in a python notebook with the following trick:
 
 .. code-block:: python
 
-    import sys
     import logging
 
-    eos.logger.setLevel(logging.DEBUG)
-    handler = logging.StreamHandler(stream=sys.stdout)
-    eos.logger.addHandler(handler)
+    eos.set_log_level(logging.DEBUG)
 
 Above, ``logging.DEBUG`` can be replaced by any logging level, which are listed `here <https://docs.python.org/3/library/logging.html#levels>`__.

@@ -81,9 +81,9 @@ _MAP_PYTHON_TO_NATIVE_LOG_LEVEL = {
     logging.ERROR: _NativeLogLevel.ERROR,
 }
 def set_log_level(level):
-    logger.setLevel(level)
     if level not in _MAP_PYTHON_TO_NATIVE_LOG_LEVEL:
         raise RuntimeError(f'Cannot handle unknown log level: {level}')
+    stderr_handler.setLevel(level)
     _set_native_log_level(_MAP_PYTHON_TO_NATIVE_LOG_LEVEL[level])
 
 def debug(msg, *args, **kwargs):
